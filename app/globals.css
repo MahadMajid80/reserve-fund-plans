@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/*
+  Reserve Fund Plans: "the long view".
+  Warm paper and sandstone grounds, deep eucalyptus green for the brand, Kimberley ochre as the single accent.
+  Fraunces (serif) for display, Instrument Sans for text. Square-cut corners, ledger rules and numbered sections:
+  the visual language of a well-kept ten-year plan, deliberately unlike BIV's rounded blue.
+*/
+@theme {
+  --color-paper: #f7f4ec;
+  --color-sand: #ede6d6;
+  --color-stone: #d8cfbb;
+  --color-ink: #1b201e;
+  --color-graphite: #3f4843;
+  --color-mute: #5e6762;
+  --color-line: rgb(27 32 30 / 0.14);
+
+  --color-eucalypt: #1f4a40;
+  --color-eucalypt-deep: #12302a;
+  --color-sage: #9db3a5;
+  --color-sage-pale: #dfe7e0;
+  --color-ochre: #b5562e;
+  --color-ochre-deep: #94431f;
+  --color-ochre-pale: #f3d9c8;
+
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, "Segoe UI", Arial, sans-serif;
+
+  --radius-card: 4px;
+}
+
+html { background: var(--color-paper); color-scheme: light; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--color-ochre-pale); color: var(--color-ink); }
+
+:focus-visible { outline: 3px solid var(--color-ochre); outline-offset: 3px; border-radius: 2px; }
+
+@layer components {
+  .wrap { margin-inline: auto; width: 100%; max-width: 78rem; padding-inline: 1.25rem; }
+  @media (min-width: 640px) { .wrap { padding-inline: 2rem; } }
+  @media (min-width: 1024px) { .wrap { padding-inline: 3rem; } }
+
+  .display { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.015em; line-height: 1.05; font-variation-settings: "SOFT" 30, "WONK" 0; }
+  .kicker { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+  .num { font-family: var(--font-display); font-variant-numeric: lining-nums tabular-nums; }
+
+  /* ledger rule: a hairline with tick marks, used between sections */
+  .ledger { background-image: repeating-linear-gradient(90deg, var(--color-line) 0 1px, transparent 1px 10%); background-size: 100% 8px; background-repeat: no-repeat; background-position: bottom; }
+
+  .btn { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; gap: 0.6rem; border-radius: var(--radius-card); padding: 0.75rem 1.4rem; font-weight: 600; line-height: 1.2; transition: background-color .2s, color .2s, border-color .2s, transform .2s; }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--color-ochre); color: #fff; }
+  .btn-primary:hover { background: var(--color-ochre-deep); }
+  .btn-dark { background: var(--color-eucalypt); color: #fff; }
+  .btn-dark:hover { background: var(--color-eucalypt-deep); }
+  .btn-ghost { border: 1.5px solid currentColor; }
+  .btn-ghost:hover { background: rgb(27 32 30 / 0.06); }
+
+  /* long-form copy on service, FAQ and legal pages */
+  .prose-rfp { color: var(--color-graphite); }
+  .prose-rfp p + p, .prose-rfp p + ul, .prose-rfp ul + p, .prose-rfp p + table, .prose-rfp table + p { margin-top: 1rem; }
+  .prose-rfp a { color: var(--color-eucalypt); font-weight: 600; text-decoration: underline; text-decoration-color: var(--color-ochre); text-underline-offset: 3px; text-decoration-thickness: 1.5px; }
+  .prose-rfp a:hover { color: var(--color-ochre-deep); }
+  .prose-rfp ul { display: grid; gap: 0.5rem; }
+  .prose-rfp li { position: relative; padding-left: 1.6rem; }
+  .prose-rfp li::before { content: ""; position: absolute; left: 0.1rem; top: 0.72em; width: 0.8rem; height: 2px; background: var(--color-ochre); }
+
+  .field { width: 100%; min-height: 3rem; border-radius: var(--radius-card); border: 1.5px solid var(--color-stone); background: #fff; padding: 0.65rem 0.9rem; color: var(--color-ink); transition: border-color .15s, box-shadow .15s; }
+  .field:hover { border-color: var(--color-mute); }
+  .field:focus { outline: none; border-color: var(--color-eucalypt); box-shadow: 0 0 0 3px rgb(31 74 64 / 0.18); }
+  .field[aria-invalid="true"] { border-color: var(--color-ochre-deep); }
+  textarea.field { min-height: 9rem; resize: vertical; }
+}
+
+/* The hero chart draws in once on load. Static for anyone who prefers reduced motion. */
+@keyframes rise { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.chart-bar { transform-box: fill-box; transform-origin: bottom; animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+.chart-line { stroke-dasharray: 1; stroke-dashoffset: 0; animation: draw 1.4s .3s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .chart-bar, .chart-line { animation: none; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}

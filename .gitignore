@@ -1,0 +1,12 @@
+node_modules
+.next
+next-env.d.ts
+*.tsbuildinfo
+
+# local secrets: never commit
+.env
+.env*.local
+.vercel
+
+# test output
+test-results/
