@@ -1,4 +1,4 @@
-/** Server-rendered JSON-LD. "<" is escaped so content can never close the script tag. */
+/** Server-rendered JSON-LD block. */
 export function JsonLd({ data }: { data: object | object[] }) {
   const list = Array.isArray(data) ? data : [data];
   return (

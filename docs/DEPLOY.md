@@ -1,6 +1,6 @@
 # Deployment, migration checklist and rollback
 
-The site is a standard Next.js 16 app with one server route (`/api/quote/`), so it needs a Node host (Vercel, as for BIV, is the simplest). Nothing here has been deployed yet.
+The site is the BIV Reports codebase with Reserve Fund Plans content: a Next.js 16 app with one server route (`/api/quote/`), so it needs a Node host (Vercel, as for BIV, is the simplest). Nothing here has been deployed yet.
 
 ## 1. Environment variables (server)
 
@@ -10,9 +10,11 @@ The site is a standard Next.js 16 app with one server route (`/api/quote/`), so 
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` | yes | The mailbox that sends enquiries (e.g. a `website@` mailbox). Port 465 = SSL, 587 = STARTTLS |
 | `QUOTE_TO_EMAIL` | yes | Comma-separated recipients. Empty = SMTP_USER's inbox |
 | `QUOTE_FROM_EMAIL` | no | Defaults to `Reserve Fund Plans website <SMTP_USER>` |
-| `NEXT_PUBLIC_RECAPTCHA_CHECKBOX_SITE_KEY` / `RECAPTCHA_CHECKBOX_SECRET_KEY` | recommended | reCAPTCHA v2 checkbox keys; add both domains + preview domain |
+| `NEXT_PUBLIC_RECAPTCHA_CHECKBOX_SITE_KEY` / `RECAPTCHA_CHECKBOX_SECRET_KEY` | recommended | reCAPTCHA v2 checkbox keys, as on BIV; add both domains + preview domain |
+| `RESEND_API_KEY` / `QUOTE_WEBHOOK_URL` | no | Alternatives to SMTP, inherited from BIV |
+| `NEXT_PUBLIC_GA_ID` | no | Google Analytics 4; nothing loads while empty |
 
-Without SMTP settings the form answers 503 and tells visitors to phone, so enquiries are never silently lost. Check `/api/quote/` (GET) after deploying: it shows `emailDelivery: true` when configured.
+Without SMTP settings the form answers 503 and tells visitors to phone, so enquiries are never silently lost. Check `/api/quote/` (GET) after deploying: it shows `"emailDelivery": "smtp"` when configured.
 
 ## 2. Staging (Vercel)
 

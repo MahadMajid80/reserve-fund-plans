@@ -1,53 +1,35 @@
 # QA report
 
-Run on 23 October 2026 against the local production build (`next start`). **Not yet run against a staging or production deployment**: repeat sections 2, 5 and 6 there before launch (see DEPLOY.md).
-
-## Summary
+Version 2: the BIV Reports design and code with the Reserve Fund Plans colours and content.
+Run on 23 October 2026 against the local production build (`next start`). Not yet run on a staging or production deployment.
 
 | Check | Result |
 |---|---|
-| TypeScript (`tsc --noEmit`) | Pass |
-| Production build + indexing guard | Pass (20 pre-rendered pages, all canonical to www, no noindex) |
-| Unit tests (`npm test`) | 13 / 13 pass |
-| Site verifier (`npm run test:site`) | 176 / 176 pass |
-| Browser end-to-end (form, keyboard, mobile menu), 1280px and 390px | 31 / 31 pass |
-| axe-core WCAG 2.2 AA, 15 pages | 0 violations (after fixing 2 issues found on the first run) |
+| TypeScript | Pass |
+| Production build + indexing guard | Pass (20 pre-rendered pages, all canonical to `https://www.reservefundplans.com.au/…`, no noindex) |
+| Unit tests (`npm test`) | 11 / 11 pass |
+| Site verifier (`npm run test:site`) | 177 / 177 pass |
+| Browser test of the quote form, 1280px and 390px | 9 / 9 pass (validation, steps, sending, both emails received) |
+| axe-core WCAG 2.2 AA, 16 pages | 0 violations (after fixing 3 found on the first run) |
 | `npm audit` | 0 vulnerabilities |
-| Browser console errors | None on any page tested |
 
-## 1. URLs and SEO (site verifier)
-All 22 preserved page URLs answer 200 at their original path with a self-referencing `https://www.` canonical, exactly one H1, a unique title (15–70 characters) and a meta description (70–170 characters), valid JSON-LD and no noindex meta. All 8 redirects are a single 301 to a 200 (no chains). All 5 removed test URLs answer 410. Missing trailing slash → one 301, query strings kept. Unknown URL → 404. Sitemap lists exactly the indexable pages; robots.txt allows crawling and points to the sitemap. Non-production hosts get `X-Robots-Tag: noindex`.
+## URLs and SEO
+All 22 preserved page URLs answer 200 at their original paths with a self-canonical, one H1, a title of 15–70 characters, a meta description and valid JSON-LD. The 9 changed URLs (attachment page, old images, WordPress sitemaps and feeds) each 301 once to a 200. The 5 WordPress test-content URLs answer 410. Missing slashes get one 301, query strings kept. Sitemap lists exactly the indexable pages.
 
-## 2. Quote form and email
-Tested through the real API and a real SMTP conversation with a local test mail server (nodemailer → smtp-server):
-- Valid request → 200 and one email to `QUOTE_TO_EMAIL`, Reply-To set to the customer, subject names service and suburb, conditional answers included, visitor markup escaped.
-- Invalid fields → 422 with field messages; missing service → 422.
-- Honeypot, too-fast submission, link spam → told "ok", **no email sent**.
-- Cross-site post → 403; non-JSON → 415; oversized body → 413; malformed JSON → 400; 6th request in 10 minutes → 429; header-injection attempt rejected, extra recipient fields ignored.
-- Mail server unreachable → 502 `delivery_failed`; the form shows a retry/phone message and keeps the answers.
-- In the browser: preselected service from `?service=`, inline errors with focus on the first invalid field, conditional questions, Back keeps values, answers restored after reload, review step and Edit links, confirmation screen, saved answers cleared after sending. Same results at 390px.
+## Quote form and email
+Through the real API and a local SMTP server: valid request → 200 and one email to `QUOTE_TO_EMAIL` with the customer as Reply-To and the Reserve Fund Plans logo embedded; invalid fields → 422; honeypot, too-fast and link-spam submissions → no email; cross-site → 403; non-JSON → 415; oversized → 413; malformed → 400; sixth request in 10 minutes → 429; header injection rejected; mail server down → 502 with a "please call" message.
 
-**Not yet tested:** delivery through your real mailbox (needs the production SMTP credentials) and the reCAPTCHA checkbox (needs keys). Both are in the go-live checklist.
+Not yet tested: delivery through the real mailbox and the reCAPTCHA checkbox (need production credentials and keys).
 
-## 3. Accessibility
-axe-core (WCAG 2.0/2.1/2.2 A and AA rules) on 15 pages: 0 violations. Fixed during QA: small ochre numerals below 4.5:1 contrast (now darker ochre) and logo links whose accessible name didn't match visible text. Keyboard: skip link is the first Tab stop; menus open on focus; mobile menu closes with Escape; focus moves to each form step's heading; visible focus ring throughout. Reduced-motion users get no chart animation. Touch targets are at least 44px. Manual screen-reader testing has not been done.
+## Accessibility fixes made during QA
+- Text on the green WHS colour now uses dark text (white on `#599B51` was below 4.5:1).
+- Map state buttons' accessible names now start with the visible label ("WA, Western Australia: …").
 
-## 4. Responsive
-Checked at 1440, 1280 and 390px wide. A horizontal-scroll bug at 390px (header tagline) was found and fixed; the verifier now confirms no horizontal scroll at 390px.
+## Performance (Lighthouse, simulated)
+| Page | Mobile | Desktop |
+|---|---|---|
+| `/` | 84 · LCP 3.3 s · CLS 0 · TBT 360 ms | 99 · LCP 0.7 s |
+| `/services/sfp/` | 87 · LCP 2.9 s · CLS 0 · TBT 350 ms | 100 · LCP 0.7 s |
+| `/quote-request/` | 91 · LCP 3.0 s · CLS 0 · TBT 230 ms | 100 · LCP 0.6 s |
 
-## 5. Performance (Lighthouse 12, local server, simulated throttling)
-
-| Page | Mobile perf | LCP | CLS | TBT | Desktop perf | LCP |
-|---|---|---|---|---|---|---|
-| `/` | 94 | 2.5 s | 0 | 200 ms | 97 | 0.5 s |
-| `/services/sfp/` | 95 | 2.4 s | 0 | 190 ms | 100 | 0.6 s |
-| `/quote-request/` | 99 | 1.6 s | 0 | 90 ms | 100 | 0.6 s |
-| `/building-insurance-valuation/` | 96 | 2.2 s | 0 | 180 ms | 100 | 0.4 s |
-
-Accessibility and best practices scored 100 on every run. SEO scored 66–69 **only** because the local host is deliberately served with `noindex` (the single failing audit is "Page is blocked from indexing"); production is not. These are lab figures from one machine: Core Web Vitals targets apply to real-user data at the 75th percentile, which will only exist after launch (check PageSpeed Insights / Search Console then). INP can't be measured in the lab; TBT is the proxy and is within budget. The mobile homepage LCP sits right at the 2.5 s target in simulation; the display font uses `font-display: optional` to keep it there.
-
-## 6. Outstanding
-1. Real SMTP and reCAPTCHA tests on staging.
-2. Old site's `sitemap.xml`, `robots.txt`, Search Console and backlink data not checked (no access).
-3. Items in CLAIMS-TO-CONFIRM.md.
-4. Field Core Web Vitals after launch.
+Accessibility and Best Practices 100 everywhere; SEO 69 only because local hosts are deliberately `noindex`. Mobile LCP is above the 2.5 s target in simulation because of the BIV design's intro and headline animations. Check real-user data after launch.

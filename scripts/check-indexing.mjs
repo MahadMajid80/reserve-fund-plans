@@ -39,7 +39,7 @@ if (robotsText) {
   if (/^\s*disallow:\s*\/\s*$/im.test(robotsText)) errors.push("robots.txt contains 'Disallow: /'");
   if (!/sitemap:\s*https:\/\/www\.reservefundplans\.com\.au\/sitemap\.xml/i.test(robotsText) && site === "https://www.reservefundplans.com.au") errors.push("robots.txt is missing the sitemap line");
 } else {
-  if (/disallow:\s*"\/"/i.test(robotsSrc)) errors.push("app/robots.ts disallows the whole site");
+  if (/disallow/i.test(robotsSrc)) errors.push("app/robots.ts contains a disallow rule");
   if (!/allow:\s*"\/"/.test(robotsSrc)) errors.push("app/robots.ts does not allow '/'");
 }
 

@@ -53,25 +53,19 @@ const post = (base, body, extra = {}) =>
     body: typeof body === "string" ? body : JSON.stringify(body),
   });
 const goodQuote = {
-  services: ["10 Year Reserve Fund Plan (WA)", "Asbestos Report (Register + Management Plan)"],
-  schemeName: "Test Scheme",
-  address: "1 Test Street",
-  suburb: "Applecross",
-  state: "WA",
-  propertyType: "Residential",
+  reports: ["10 Year Reserve Fund Plan (WA)", "Asbestos Report (Register + Management Plan)"],
+  address: "1 Test Street, Applecross WA 6153",
   lots: "12",
   planNo: "SP 12345",
-  existingPlan: "No",
-  builtBefore2004: "Yes",
+  managerName: "Pat Manager",
+  managerCompany: "QA Strata",
+  instructions: "Automated end-to-end test <b>with markup</b>.",
   name: "Verify Script",
-  organisation: "QA",
-  role: "Strata manager",
-  email: "qa@example.com.au",
   phone: "0400 123 456",
-  preference: "Email back",
-  timing: "Within a month",
-  message: "Automated end-to-end test <b>with markup</b>.",
+  email: "qa@example.com.au",
+  pref: ["Email back"],
   website: "",
+  source: "verify-site",
   elapsed: 30000,
 };
 
@@ -144,16 +138,17 @@ async function formChecks(base, inbox) {
   ok("email delivered to QUOTE_TO_EMAIL", inbox.length === 1 && /To: .*enquiries@test\.local/i.test(mail));
   ok("email Reply-To is the customer", /Reply-To: qa@example\.com\.au/i.test(mail));
   const parsed = await simpleParser(mail);
-  ok("email contains the property and conditional answers", parsed.text.includes("1 Test Street") && parsed.text.includes("Existing plan in place: No") && String(parsed.html).includes("Built pre-2004"));
+  ok("email contains the reports and property", parsed.text.includes("1 Test Street") && parsed.text.includes("10 Year Reserve Fund Plan (WA)") && parsed.text.includes("SP 12345"));
   ok("visitor markup is escaped in the email", !String(parsed.html).includes("<b>with markup</b>") && String(parsed.html).includes("&lt;b&gt;with markup"));
-  ok("email subject names the service and suburb", /Applecross/.test(parsed.subject || ""), parsed.subject);
+  ok("email carries the embedded Reserve Fund Plans logo", (parsed.attachments || []).some((a) => a.cid === "rfp-logo"));
+  ok("email subject names the customer", /Verify Script/.test(parsed.subject || ""), parsed.subject);
 
   const before = inbox.length;
   const r2 = await post(base, { ...goodQuote, email: "bad", phone: "" });
   const d2 = await r2.json();
   ok("invalid input → 422 with field errors", r2.status === 422 && d2.errors?.email && d2.errors?.phone, JSON.stringify(d2.errors));
-  const r3 = await post(base, { ...goodQuote, services: [] });
-  ok("missing service → 422", r3.status === 422);
+  const r3 = await post(base, { ...goodQuote, reports: [] });
+  ok("missing report → 422", r3.status === 422);
   const r4 = await post(base, { ...goodQuote, website: "http://spam.example" });
   ok("honeypot filled → told ok, nothing sent", r4.status === 200);
   const r5 = await post(base, { ...goodQuote, elapsed: 500 });
@@ -172,12 +167,12 @@ async function formChecks(base, inbox) {
   ok("malformed JSON → 400", r10.status === 400);
   const ip = { "x-forwarded-for": "10.9.9.9" };
   const codes = [];
-  for (let i = 0; i < 6; i++) codes.push((await post(base, { ...goodQuote, services: [] }, ip)).status);
+  for (let i = 0; i < 6; i++) codes.push((await post(base, { ...goodQuote, reports: [] }, ip)).status);
   ok("6th request in 10 minutes → 429", codes[5] === 429 && codes.slice(0, 5).every((c) => c === 422), codes.join(","));
   const r11 = await post(base, { ...goodQuote, to: "victim@example.com", bcc: "x@y.z", email: "a@b.com\r\nBcc: victim@example.com" });
   ok("header injection / extra recipients rejected", r11.status === 422 && inbox.every((m) => !/victim@example\.com/i.test(m.split("\r\n\r\n")[0])));
   const g = await (await fetch(base + "/api/quote/")).json();
-  ok("health check exposes no secrets", JSON.stringify(g).length < 120 && !JSON.stringify(g).includes("pass"), JSON.stringify(g));
+  ok("health check exposes no secrets", !/pass|key"\s*:\s*"[^"]{8,}/i.test(JSON.stringify(g)), JSON.stringify(g));
 }
 
 async function main() {

@@ -1,94 +1,157 @@
 @import "tailwindcss";
 
 /*
-  Reserve Fund Plans: "the long view".
-  Warm paper and sandstone grounds, deep eucalyptus green for the brand, Kimberley ochre as the single accent.
-  Fraunces (serif) for display, Instrument Sans for text. Square-cut corners, ledger rules and numbered sections:
-  the visual language of a well-kept ten-year plan, deliberately unlike BIV's rounded blue.
+  Reserve Fund Plans: the BIV Reports design system in the Reserve Fund Plans colours.
+  Brand red (from the old site's buttons and links), black panels and logo yellow (from the yellow-on-black logo),
+  and the four diamond colours (blue, green, yellow, red) from the old service icons. Rounded frames, hairlines and soft depth.
 */
 @theme {
-  --color-paper: #f7f4ec;
-  --color-sand: #ede6d6;
-  --color-stone: #d8cfbb;
-  --color-ink: #1b201e;
-  --color-graphite: #3f4843;
-  --color-mute: #5e6762;
-  --color-line: rgb(27 32 30 / 0.14);
+  --color-canvas: #f6f6f4;
+  --color-card: #ffffff;
+  --color-mist: #efeee9;
+  --color-ink: #171717;
+  --color-graphite: #474747;
+  --color-mute: #636363;
+  --color-line: rgb(23 23 23 / 0.1);
 
-  --color-eucalypt: #1f4a40;
-  --color-eucalypt-deep: #12302a;
-  --color-sage: #9db3a5;
-  --color-sage-pale: #dfe7e0;
-  --color-ochre: #b5562e;
-  --color-ochre-deep: #94431f;
-  --color-ochre-pale: #f3d9c8;
+  --color-brand: #c8331a;
+  --color-navy: #141414;
+  --color-night: #0a0a0a;
+  --color-brand-soft: #f5dc3c;
+  --color-sage: #599b51;
+  --color-sage-deep: #3f7339;
+  --color-slate: #7a6100;
+  --color-oxblood: #b01e28;
+  --color-oxblood-soft: #f2a0a4;
 
-  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, "Segoe UI", Arial, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
-  --radius-card: 4px;
+  --shadow-soft: 0 1px 2px rgb(20 20 20 / 0.04), 0 8px 24px -6px rgb(20 20 20 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(20 20 20 / 0.04), 0 24px 48px -12px rgb(20 20 20 / 0.18);
+
+  --animate-marquee: marquee 50s linear infinite;
+  --animate-spin-slow: spin 40s linear infinite;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
 }
 
-html { background: var(--color-paper); color-scheme: light; scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html { background: var(--color-canvas); color-scheme: light; interpolate-size: allow-keywords; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
 
 body {
-  background: var(--color-paper);
+  background: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
-::selection { background: var(--color-ochre-pale); color: var(--color-ink); }
-
-:focus-visible { outline: 3px solid var(--color-ochre); outline-offset: 3px; border-radius: 2px; }
+::selection { background: var(--color-brand-soft); color: var(--color-ink); }
 
 @layer components {
-  .wrap { margin-inline: auto; width: 100%; max-width: 78rem; padding-inline: 1.25rem; }
+  .wrap { margin-inline: auto; width: 100%; max-width: 84rem; padding-inline: 1.25rem; }
   @media (min-width: 640px) { .wrap { padding-inline: 2rem; } }
   @media (min-width: 1024px) { .wrap { padding-inline: 3rem; } }
 
-  .display { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.015em; line-height: 1.05; font-variation-settings: "SOFT" 30, "WONK" 0; }
-  .kicker { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
-  .num { font-family: var(--font-display); font-variant-numeric: lining-nums tabular-nums; }
+  /* headings: bold, tight, restrained */
+  .h-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+  }
+  .h-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .prose-biv p + p { margin-top: 1.1em; }
 
-  /* ledger rule: a hairline with tick marks, used between sections */
-  .ledger { background-image: repeating-linear-gradient(90deg, var(--color-line) 0 1px, transparent 1px 10%); background-size: 100% 8px; background-repeat: no-repeat; background-position: bottom; }
+  /* breadcrumb separators drawn in CSS, so "/" is not part of the link text */
+  .crumbs li + li::before { content: "/"; opacity: 0.5; }
 
-  .btn { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; gap: 0.6rem; border-radius: var(--radius-card); padding: 0.75rem 1.4rem; font-weight: 600; line-height: 1.2; transition: background-color .2s, color .2s, border-color .2s, transform .2s; }
-  .btn:active { transform: translateY(1px); }
-  .btn-primary { background: var(--color-ochre); color: #fff; }
-  .btn-primary:hover { background: var(--color-ochre-deep); }
-  .btn-dark { background: var(--color-eucalypt); color: #fff; }
-  .btn-dark:hover { background: var(--color-eucalypt-deep); }
-  .btn-ghost { border: 1.5px solid currentColor; }
-  .btn-ghost:hover { background: rgb(27 32 30 / 0.06); }
+  /* FAQ: native details/summary, animated where the browser supports it */
+  .faq-icon { background: rgb(23 23 23 / 0.05); color: var(--color-ink); transition: transform 0.4s, background-color 0.4s, color 0.4s; }
+  .faq[open] .faq-icon { transform: rotate(45deg); background: var(--faq-on); color: var(--faq-on-text); }
+  .faq::details-content { block-size: 0; overflow: hidden; transition: block-size 0.45s cubic-bezier(0.76, 0, 0.24, 1), content-visibility 0.45s allow-discrete; }
+  .faq[open]::details-content { block-size: auto; }
 
-  /* long-form copy on service, FAQ and legal pages */
-  .prose-rfp { color: var(--color-graphite); }
-  .prose-rfp p + p, .prose-rfp p + ul, .prose-rfp ul + p, .prose-rfp p + table, .prose-rfp table + p { margin-top: 1rem; }
-  .prose-rfp a { color: var(--color-eucalypt); font-weight: 600; text-decoration: underline; text-decoration-color: var(--color-ochre); text-underline-offset: 3px; text-decoration-thickness: 1.5px; }
-  .prose-rfp a:hover { color: var(--color-ochre-deep); }
-  .prose-rfp ul { display: grid; gap: 0.5rem; }
-  .prose-rfp li { position: relative; padding-left: 1.6rem; }
-  .prose-rfp li::before { content: ""; position: absolute; left: 0.1rem; top: 0.72em; width: 0.8rem; height: 2px; background: var(--color-ochre); }
+  /* frosted glass */
+  .glass {
+    background: rgb(255 255 255 / 0.72);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  }
+  .glass-dark {
+    background: rgb(20 20 20 / 0.55);
+    backdrop-filter: blur(18px) saturate(1.3);
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  }
 
-  .field { width: 100%; min-height: 3rem; border-radius: var(--radius-card); border: 1.5px solid var(--color-stone); background: #fff; padding: 0.65rem 0.9rem; color: var(--color-ink); transition: border-color .15s, box-shadow .15s; }
-  .field:hover { border-color: var(--color-mute); }
-  .field:focus { outline: none; border-color: var(--color-eucalypt); box-shadow: 0 0 0 3px rgb(31 74 64 / 0.18); }
-  .field[aria-invalid="true"] { border-color: var(--color-ochre-deep); }
-  textarea.field { min-height: 9rem; resize: vertical; }
+  /* fine grain on dark panels */
+  .grain { position: relative; isolation: isolate; }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: radial-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
 }
 
-/* The hero chart draws in once on load. Static for anyone who prefers reduced motion. */
-@keyframes rise { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-.chart-bar { transform-box: fill-box; transform-origin: bottom; animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
-.chart-line { stroke-dasharray: 1; stroke-dashoffset: 0; animation: draw 1.4s .3s ease-out both; }
+:focus-visible { outline: 2px solid var(--color-brand); outline-offset: 3px; border-radius: 6px; }
+
+/* Above-the-fold entrance animations in plain CSS: they start on first paint, without waiting for
+   JavaScript, so the largest contentful paint isn't held back by hydration. --d sets the delay. */
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes line-up { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes clip-in { from { clip-path: inset(6% 6% 6% 6% round 48px); } to { clip-path: inset(0% 0% 0% 0% round 32px); } }
+@keyframes preloader-out { to { clip-path: inset(0% 0% 100% 0% round 0 0 56px 56px); visibility: hidden; } }
+@keyframes fade-out { to { opacity: 0; transform: translateY(-24px); } }
+.rise { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both; }
+.line-up { display: block; animation: line-up 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both; }
+.clip-in { animation: clip-in 1.2s cubic-bezier(0.76, 0, 0.24, 1) var(--d, 0s) both; }
+.preloader { animation: preloader-out 0.7s cubic-bezier(0.76, 0, 0.24, 1) 0.6s forwards; }
+.preloader > div { animation: fade-out 0.35s ease-in 0.6s forwards; }
+
 @media (prefers-reduced-motion: reduce) {
-  .chart-bar, .chart-line { animation: none; }
-  *, *::before, *::after { transition-duration: 0.01ms !important; }
+  .rise, .line-up, .clip-in { animation: none; }
+  .preloader { display: none; }
+  .faq::details-content { transition: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Email anti-scraping: the "@" in the server HTML is drawn by CSS (see components/Email.tsx). */
+.email-at::before {
+  content: "@";
+}
+
+/* reCAPTCHA: Google's badge (v3) and the "I'm not a robot" box (checkbox) are both left visible. */
+
+/* Failsafe: if JavaScript hasn't started after 3.5 s (very slow device, old browser, blocked script), show any
+   content that was waiting to animate in, so the page is never left blank. Once JS runs, <html> gets "js-ready"
+   and the normal animations take over. CSS animations override inline styles, so this wins over opacity:0. */
+@keyframes reveal-failsafe {
+  to { opacity: 1; transform: none; }
+}
+html:not(.js-ready) [data-reveal] {
+  animation: reveal-failsafe 0.5s ease 3.5s forwards;
 }

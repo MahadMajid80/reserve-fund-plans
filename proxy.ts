@@ -2,19 +2,18 @@ import { NextResponse, type NextRequest } from "next/server";
 
 // Runs before every page request (not /api, not /_next).
 //  1. reservefundplans.com.au (no www) → https://www.reservefundplans.com.au, one 301.
-//  2. Removed WordPress test content answers 410 Gone (it was never real content, so no redirect).
-//  3. Adds the trailing slash with a single 301 (/about-us → /about-us/), like the old WordPress site.
-//  4. Every host except production gets X-Robots-Tag: noindex, so previews stay out of Google.
-//     scripts/check-indexing.mjs fails the build if production could ever be noindexed.
+//  2. Adds the trailing slash with a single 301 (e.g. /about-us → /about-us/), like the old WordPress site.
+//  3. Keeps every host except the production host out of search results with X-Robots-Tag: noindex.
+//     Production (www.reservefundplans.com.au) never gets a noindex: scripts/check-indexing.mjs fails the build if it would.
 
 const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.reservefundplans.com.au").replace(/\/$/, "");
 const PROD_HOST = new URL(SITE).host;
 const APEX_HOST = PROD_HOST.replace(/^www\./, "");
 
-/** Old WordPress test posts and their archives: removed on purpose (see docs/url-migration-map.csv). */
-export const GONE = new Set(["/blog/", "/2020/06/10/test-post/", "/2020/06/11/test-post-2/", "/category/uncategorized/", "/author/wdobrow/"]);
-
 /** A plain 301. (NextResponse.redirect normalises the URL and would strip the trailing slash.) */
+/** Old WordPress test posts and their archives: removed on purpose, answered with 410 Gone (see docs/url-migration-map.csv). */
+const GONE = new Set(["/blog/", "/2020/06/10/test-post/", "/2020/06/11/test-post-2/", "/category/uncategorized/", "/author/wdobrow/"]);
+
 const moved = (location: string) => new NextResponse(null, { status: 301, headers: { Location: location } });
 
 function guard(res: NextResponse, host: string) {

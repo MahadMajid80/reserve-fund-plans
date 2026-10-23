@@ -1,10 +1,18 @@
-import { FaqArticle } from "@/components/FaqArticle";
-import { pageMeta } from "@/lib/seo";
-import { serviceBy } from "@/lib/services";
+import { JsonLd } from "@/components/JsonLd";
+import { FaqTopicPage } from "@/components/pages/InfoPages";
+import { faqSchema, pageMeta } from "@/lib/seo";
+import { serviceBySlug } from "@/lib/services";
 
-const s = serviceBy("biv");
-export const metadata = pageMeta({ path: s.faqPath, title: s.faqTitle, description: s.faqDescription });
+const s = serviceBySlug("biv")!;
+
+export const metadata = pageMeta({ path: s.faqPath, title: s.faq.title, description: s.faq.description });
 
 export default function Page() {
-  return <FaqArticle s={s} />;
+  return (
+    <>
+      {/* FAQPage schema built from the same data that renders the visible answers */}
+      <JsonLd data={faqSchema(s.faq.faqs)} />
+      <FaqTopicPage service={s} />
+    </>
+  );
 }

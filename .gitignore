@@ -8,5 +8,6 @@ next-env.d.ts
 .env*.local
 .vercel
 
-# test output
-test-results/
+# cPanel build output
+.cpanel-work/
+cpanel-build/
