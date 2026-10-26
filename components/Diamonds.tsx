@@ -50,6 +50,29 @@ export function Mark({
   );
 }
 
+// Inner diamond cut out of the outlined one (the ring is about a sixth of the diamond's width, as on the old icons).
+const Dinner = (cx: number, cy: number) => `M${cx} ${cy - 13.6} L${cx + 10.3} ${cy} L${cx} ${cy + 13.6} L${cx - 10.3} ${cy} Z`;
+const ICON_KEYS = ["blue", "brass", "oxblood", "sage"] as const; // same order as SHAPES
+
+/**
+ * A service icon from the old Reserve Fund Plans site: the four diamonds, with the given report's diamond drawn as an
+ * outline (BIV top/blue, WHS left/green, Reserve Fund Plans right/yellow, Asbestos bottom/red).
+ */
+export function ServiceIcon({ k, className = "h-16 w-auto" }: { k: (typeof ICON_KEYS)[number]; className?: string }) {
+  const centres: [number, number][] = [[42.5, 25], [59.5, 48], [42.5, 71], [25.5, 48]];
+  return (
+    <svg viewBox="8 2 69 92" className={className} aria-hidden="true" focusable="false">
+      {SHAPES.map((s, i) =>
+        ICON_KEYS[i] === k ? (
+          <path key={s.d} d={`${s.d} ${Dinner(...centres[i])}`} fill={s.fill} fillRule="evenodd" />
+        ) : (
+          <path key={s.d} d={s.d} fill={s.fill} />
+        ),
+      )}
+    </svg>
+  );
+}
+
 /** The Reserve Fund Plans logo (a yellow-on-black badge that reads on light and dark grounds). */
 export function Logo({ onDark = false, className = "h-11" }: { onDark?: boolean; className?: string }) {
   return (

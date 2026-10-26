@@ -3,9 +3,8 @@
 import { Email } from "@/components/Email";
 import { AnimatePresence, animate, motion, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { Logo, Mark } from "./Diamonds";
+import { Logo, Mark, ServiceIcon } from "./Diamonds";
 import { Photo } from "./Photo";
-import { servicePhoto } from "@/lib/photos";
 import { A, Arrow, Button, Chapter, Chip, Counter, FadeUp, LineLink, LineReveal, Marquee, ease, easeInOut, useSectionProgress } from "./ui";
 import { useFirstLoad } from "@/lib/intro";
 import { alsoAvailable, contact, diamonds, services, states, stats, steps, timeline, tones, values, type DiamondKey } from "@/lib/content";
@@ -215,11 +214,11 @@ export function Reports() {
           lines={["Four reports.", <span key="o" className="text-mute">One standard of care.</span>]}
           text="Each report is properly researched and presented in our Easy to Read Report format, so strata managers and councils of owners can act with confidence."
         />
-        {/* Reserve Fund Plans layout: one row of photo-topped cards (BIV uses a 2×2 grid of spotlight cards) */}
+        {/* Reserve Fund Plans layout: one row of cards with the old site's diamond service icons (BIV uses a 2×2 grid of spotlight cards) */}
         <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((s, i) => (
             <FadeUp key={s.code} delay={i * 0.07} className="h-full">
-              <PhotoCard s={s} n={i + 1} />
+              <IconCard s={s} n={i + 1} />
             </FadeUp>
           ))}
         </div>
@@ -228,19 +227,22 @@ export function Reports() {
   );
 }
 
-/** A service card with a building photo on top and the report colour as a bar under it. */
-export function PhotoCard({ s, n }: { s: (typeof services)[number]; n: number }) {
-  const slug = s.href.split("/").filter(Boolean).pop() as keyof typeof servicePhoto;
+/** A service card with the report's diamond icon from the old Reserve Fund Plans site and a report-colour bar. */
+export function IconCard({ s, n }: { s: (typeof services)[number]; n: number }) {
   return (
     <A href={s.href} className="group flex h-full flex-col overflow-hidden rounded-card bg-white ring-1 ring-line transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]">
-      <span className="relative block aspect-[16/9] overflow-hidden bg-navy sm:aspect-[4/3]">
-        <Photo k={servicePhoto[slug]} decorative fill sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-        <span className="absolute top-3 left-3 rounded-md bg-white/95 px-2.5 py-1 text-[12px] font-bold tracking-wide text-ink">{s.code}</span>
-        <span className="absolute top-3 right-3 text-sm font-semibold text-white tabular-nums drop-shadow">0{n}</span>
-      </span>
       <span className="block h-1.5" style={{ background: diamonds[s.key] }} aria-hidden="true" />
-      <span className="flex flex-1 flex-col p-6">
-        <span className="h-title text-[1.35rem]">{s.title}</span>
+      <span className="flex flex-1 flex-col p-6 sm:p-7">
+        <span className="flex items-start justify-between" aria-hidden="true">
+          <span className="grid size-20 place-items-center rounded-card transition-transform duration-500 group-hover:-translate-y-0.5" style={{ background: tones[s.key].tint }}>
+            <ServiceIcon k={s.key} className="h-16 w-auto" />
+          </span>
+          <span className="flex flex-col items-end gap-2">
+            <span className="text-sm font-semibold text-mute tabular-nums">0{n}</span>
+            <span className="rounded-md px-2.5 py-1 text-[12px] font-bold tracking-wide" style={{ background: tones[s.key].tint, color: tones[s.key].text }}>{s.code}</span>
+          </span>
+        </span>
+        <span className="h-title mt-7 text-[1.35rem]">{s.title}</span>
         <span className="mt-2 block text-[15px] leading-relaxed text-graphite">{s.body}</span>
         <span className="mt-auto flex items-center gap-2 pt-6 text-[15px] font-semibold text-brand">
           Read more

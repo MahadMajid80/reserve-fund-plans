@@ -41,7 +41,7 @@ The logo in `public/rfp-logo.svg` is a stand-in redrawn from the yellow-on-black
 | Photos | One building photo, Sydney skyline | Australian high-rises: Sydney CBD (hero), Elizabeth Quay and Kings Park (Perth), residential and glass towers |
 | Closing panels | Plain dark panel | Perth skyline photo behind the call to action, steps on a numbered timeline |
 | Section labels | "01 —— TITLE" | Red bar, title, then "/ 01" |
-| Report cards | 2×2 white spotlight cards | One row of photo-topped cards with a report-colour bar |
+| Report cards | 2×2 white spotlight cards | One row of cards with the old site’s diamond service icons and a report-colour bar |
 | Figures | White stat cards | Yellow-and-black band (the logo's colours) |
 | Calculator, coverage map | Text left, panel right | Flipped: panel/map left |
 | About section | Staggered value cards | Building photo + numbered values list; dark timeline strip |
