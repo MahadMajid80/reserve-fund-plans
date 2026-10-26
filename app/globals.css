@@ -24,8 +24,12 @@
   --color-oxblood: #b01e28;
   --color-oxblood-soft: #f2a0a4;
 
-  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  /* squarer than BIV: cards and panels use a modest radius instead of 1.5–2.5rem */
+  --radius-card: 0.75rem;
+  --radius-panel: 1rem;
 
   --shadow-soft: 0 1px 2px rgb(20 20 20 / 0.04), 0 8px 24px -6px rgb(20 20 20 / 0.08);
   --shadow-lift: 0 2px 4px rgb(20 20 20 / 0.04), 0 24px 48px -12px rgb(20 20 20 / 0.18);
@@ -60,14 +64,14 @@ body {
   /* headings: bold, tight, restrained */
   .h-display {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 1.02;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
   }
   .h-title {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.025em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
     line-height: 1.15;
   }
   .eyebrow {

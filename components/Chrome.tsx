@@ -46,7 +46,8 @@ export function Navbar() {
   const serviceDetail = /^\/services\/[^/]+\/?$/.test(path);
   // Version 2 round 4: over the navy service-page hero (before scrolling) the menu turns light-on-dark,
   // with the white logo from the footer, instead of a white bar.
-  const dark = serviceDetail && !raised && !drop && !open;
+  // Reserve Fund Plans: the homepage hero is a full-bleed photo too, so the menu is light-on-dark there as well.
+  const dark = (serviceDetail || path === "/") && !raised && !drop && !open;
 
   return (
     <>
@@ -59,25 +60,25 @@ export function Navbar() {
         onMouseLeave={() => setDrop(null)}
       >
         <div
-          className={`mx-auto max-w-[84rem] rounded-[1.75rem] transition-[background,box-shadow] duration-500 ${raised || drop ? "glass shadow-[var(--shadow-soft)] ring-1 ring-line" : "bg-transparent"}`}
+          className={`mx-auto max-w-[84rem] rounded-card transition-[background,box-shadow] duration-500 ${raised || drop ? "glass shadow-[var(--shadow-soft)] ring-1 ring-line" : "bg-transparent"}`}
         >
           <nav className="flex h-16 items-center justify-between gap-4 pr-2 pl-4 sm:pl-5" aria-label="Main">
             <A href="/" aria-label="Reserve Fund Plans home" className="inline-flex min-h-11 items-center">
               <Logo onDark={dark || (open && !raised)} className="h-10 sm:h-11" />
             </A>
 
-            <ul className={`hidden items-center gap-0.5 rounded-full p-1 ring-1 transition-colors duration-500 lg:flex ${dark ? "bg-transparent ring-white/30" : "bg-white/60 ring-line"}`}>
+            <ul className={`hidden items-center gap-0.5 rounded-lg p-1 ring-1 transition-colors duration-500 lg:flex ${dark ? "bg-transparent ring-white/30" : "bg-white/60 ring-line"}`}>
               {nav.map((n) => {
                 const on = isActive(path, n.href);
                 const dropKey = n.href === paths.services ? "services" : n.href === paths.faq ? "faq" : null;
                 const hasDrop = dropKey !== null;
                 return (
                   <li key={n.label} onMouseEnter={() => setDrop(dropKey)} className="relative">
-                    {on && <motion.span layoutId="nav-on" className={`absolute inset-0 rounded-full transition-colors duration-500 ${dark ? "bg-white" : "bg-brand"}`} transition={{ type: "spring", stiffness: 380, damping: 34 }} />}
+                    {on && <motion.span layoutId="nav-on" className={`absolute inset-0 rounded-lg transition-colors duration-500 ${dark ? "bg-white" : "bg-brand"}`} transition={{ type: "spring", stiffness: 380, damping: 34 }} />}
                     <A
                       href={n.href}
                       aria-current={on ? "page" : undefined}
-                      className={`relative flex min-h-11 items-center gap-1 rounded-full px-4 text-[15px] font-bold tracking-[-0.005em] transition-colors ${on ? (dark ? "text-navy" : "text-white") : dark ? "text-white hover:text-white/75" : "text-ink hover:text-brand"}`}
+                      className={`relative flex min-h-11 items-center gap-1 rounded-lg px-4 text-[15px] font-bold tracking-[-0.005em] transition-colors ${on ? (dark ? "text-navy" : "text-white") : dark ? "text-white hover:text-white/75" : "text-ink hover:text-brand"}`}
                     >
                       {n.label}
                       {hasDrop && (
@@ -94,17 +95,17 @@ export function Navbar() {
             <div className="flex items-center gap-2">
               <a
                 href={contact.phoneHref}
-                className={`hidden min-h-11 items-center gap-2 rounded-full px-4 text-[14px] font-semibold ring-1 tabular-nums transition-colors xl:inline-flex ${dark ? "bg-transparent text-white ring-white/30 hover:bg-white/10" : "bg-white/60 text-ink ring-line hover:bg-white"}`}
+                className={`hidden min-h-11 items-center gap-2 rounded-lg px-4 text-[14px] font-semibold ring-1 tabular-nums transition-colors xl:inline-flex ${dark ? "bg-transparent text-white ring-white/30 hover:bg-white/10" : "bg-white/60 text-ink ring-line hover:bg-white"}`}
               >
                 <Phone className="size-4" />
                 {contact.phone}
               </a>
               <A
                 href={contact.quote}
-                className={`group hidden min-h-11 items-center gap-2 rounded-full py-2 pr-2 pl-5 text-[14px] font-semibold transition-colors sm:inline-flex ${dark ? "bg-white text-navy hover:bg-brand-soft" : "bg-brand text-white hover:bg-navy"}`}
+                className={`group hidden min-h-11 items-center gap-2 rounded-lg py-2 pr-2 pl-5 text-[14px] font-semibold transition-colors sm:inline-flex ${dark ? "bg-white text-navy hover:bg-brand-soft" : "bg-brand text-white hover:bg-navy"}`}
               >
                 Request a quote
-                <span aria-hidden="true" className={`grid size-7 place-items-center rounded-full transition-colors ${dark ? "bg-brand text-white" : "bg-white/15 group-hover:bg-white group-hover:text-brand"}`}>
+                <span aria-hidden="true" className={`grid size-7 place-items-center rounded-md transition-colors ${dark ? "bg-brand text-white" : "bg-white/15 group-hover:bg-white group-hover:text-brand"}`}>
                   <Arrow className="size-3.5" />
                 </span>
               </A>
@@ -112,7 +113,7 @@ export function Navbar() {
                 onClick={() => setOpen((o) => !o)}
                 aria-label={open ? "Close menu" : "Open menu"}
                 aria-expanded={open}
-                className={`relative z-[60] grid size-11 place-items-center rounded-full transition-colors lg:hidden ${open || dark ? "bg-white text-ink" : "bg-brand text-white"}`}
+                className={`relative z-[60] grid size-11 place-items-center rounded-lg transition-colors lg:hidden ${open || dark ? "bg-white text-ink" : "bg-brand text-white"}`}
               >
                 <span className={`absolute h-[1.5px] w-4.5 bg-current transition-all duration-500 ${open ? "rotate-45" : "-translate-y-[3.5px]"}`} />
                 <span className={`absolute h-[1.5px] w-4.5 bg-current transition-all duration-500 ${open ? "-rotate-45" : "translate-y-[3.5px]"}`} />
@@ -135,7 +136,7 @@ export function Navbar() {
                 <div key={drop} className="grid grid-cols-[1fr_1fr_1fr_1fr_0.9fr] gap-2 px-2 pt-1.5 pb-2">
                   {services.map((s, i) => (
                     <motion.div key={s.slug} initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.06 + i * 0.05, duration: 0.6, ease }}>
-                      <A href={drop === "faq" ? s.faqPath : s.path} className="group flex h-full flex-col gap-3 rounded-[1.25rem] bg-white p-5 ring-1 ring-line transition-shadow hover:shadow-[var(--shadow-lift)]">
+                      <A href={drop === "faq" ? s.faqPath : s.path} className="group flex h-full flex-col gap-3 rounded-card bg-white p-5 ring-1 ring-line transition-shadow hover:shadow-[var(--shadow-lift)]">
                         <span className="flex items-center justify-between" aria-hidden="true">
                           <span className="size-2.5 rounded-full" style={{ background: diamonds[s.key] }} />
                           <span className="text-mute transition-all duration-500 group-hover:translate-x-0.5 group-hover:text-ink">
@@ -152,7 +153,7 @@ export function Navbar() {
                     </motion.div>
                   ))}
                   <motion.div initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3, duration: 0.6, ease }}>
-                    <A href={drop === "faq" ? paths.faq : paths.services} className="grain flex h-full flex-col gap-3 rounded-[1.25rem] bg-navy p-5 text-white">
+                    <A href={drop === "faq" ? paths.faq : paths.services} className="grain flex h-full flex-col gap-3 rounded-card bg-navy p-5 text-white">
                       <Mark className="size-6" />
                       <span>
                         <span className="h-title block text-[1.05rem]">{drop === "faq" ? "All FAQ's" : "All services"}</span>{" "}
@@ -217,10 +218,10 @@ export function Navbar() {
               ))}
             </ul>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45, duration: 0.6, ease }} className="mt-8 grid gap-2">
-              <A href={contact.quote} onClick={() => setOpen(false)} className="rounded-full bg-brand px-6 py-4 text-center font-semibold text-white">
+              <A href={contact.quote} onClick={() => setOpen(false)} className="rounded-lg bg-brand px-6 py-4 text-center font-semibold text-white">
                 Request a quote
               </A>
-              <a href={contact.phoneHref} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-center font-semibold ring-1 ring-white/25">
+              <a href={contact.phoneHref} className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-4 text-center font-semibold ring-1 ring-white/25">
                 <Phone className="size-4" />
                 Call {contact.phone}
               </a>
@@ -236,7 +237,7 @@ export function Navbar() {
 export function Footer() {
   return (
     <footer className="px-3 pb-3 sm:px-5 sm:pb-5">
-      <div className="grain relative overflow-hidden rounded-[2rem] bg-night text-white sm:rounded-[2.5rem]">
+      <div className="grain relative overflow-hidden rounded-panel bg-night text-white sm:rounded-panel">
         <Mark line className="pointer-events-none absolute -top-24 -right-24 w-[30rem] text-white/[0.04]" />
         <div className="wrap relative grid gap-12 py-14 sm:py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>

@@ -2,12 +2,12 @@
 
 import { Email } from "@/components/Email";
 import { AnimatePresence, animate, motion, useMotionValue, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Logo, Mark } from "./Diamonds";
+import { Photo } from "./Photo";
 import { A, Arrow, Button, Chapter, Chip, Counter, FadeUp, LineLink, LineReveal, Marquee, ease, easeInOut, useSectionProgress } from "./ui";
 import { useFirstLoad } from "@/lib/intro";
-import { alsoAvailable, buildingPhoto, contact, skylinePhoto, diamonds, services, states, stats, steps, timeline, tones, values, type DiamondKey } from "@/lib/content";
+import { alsoAvailable, contact, diamonds, services, states, stats, steps, timeline, tones, values, type DiamondKey } from "@/lib/content";
 import { facts, paths } from "@/lib/site";
 import { AU_LABELS, AU_PATHS, AU_VIEWBOX } from "@/lib/australiaMap";
 import { testimonialByName, testimonialCount } from "@/lib/testimonials";
@@ -28,162 +28,141 @@ export function Preloader() {
   );
 }
 
-/* ════════ Hero: split, rounded photo, glass report card ════════ */
+/* ════════ Hero: full-bleed Perth photo, text on a dark wash, glass plan card ════════
+   (Reserve Fund Plans' own layout: BIV uses a split hero with a rounded photo frame.) */
 export function Hero() {
   const START = useFirstLoad() ? 0.7 : 0.15;
   const at = (n: number) => ({ ["--d" as string]: `${n}s` }) as React.CSSProperties;
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
-  const cardY = useTransform(scrollYProgress, [0, 1], [0, -70]);
+  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const cardY = useTransform(scrollYProgress, [0, 1], [0, -60]);
 
   return (
-    <section ref={ref} id="top" className="relative overflow-hidden pt-28 sm:pt-32">
-      {/* soft background glow */}
-      <div className="pointer-events-none absolute -top-40 right-[-10%] size-[44rem] rounded-full bg-[radial-gradient(circle,rgb(200_51_26/0.07),transparent_65%)]" />
-      <div className="pointer-events-none absolute top-60 left-[-15%] size-[40rem] rounded-full bg-[radial-gradient(circle,rgb(245_220_60/0.16),transparent_65%)]" />
+    <section ref={ref} id="top" className="relative">
+      <div className="relative isolate overflow-hidden bg-navy text-white">
+        <motion.div style={{ y: imgY, scale: 1.08 }} className="absolute inset-0 -z-10">
+          <Photo k="elizabethQuay" fill priority fetchPriority="high" sizes="100vw" className="object-cover" />
+        </motion.div>
+        {/* dark wash, strongest behind the text, so it reads on any part of the photo */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy/95 via-navy/75 to-navy/25" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-navy/80 via-transparent to-navy/40" />
 
-      <div className="wrap relative grid items-center gap-14 pb-16 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24">
-        <div>
-          <div className="rise" style={at(START)}>
-            <Chip>
-              <span className="size-1.5 rounded-full bg-brand" />
-              Registered Valuers since 1984
-            </Chip>
-          </div>
+        <div className="wrap relative grid items-end gap-12 pt-32 pb-14 sm:pt-40 sm:pb-20 lg:min-h-[44rem] lg:grid-cols-[1.25fr_1fr] lg:gap-16 lg:pb-24">
+          <div>
+            <div className="rise" style={at(START)}>
+              <Chip dark>
+                <span className="size-1.5 bg-brand-soft" />
+                Registered Valuers since 1984 · Perth, WA
+              </Chip>
+            </div>
 
-          <h1 className="h-display mt-7 text-[clamp(2.2rem,4.6vw,3.9rem)] [text-wrap:balance]">
-            <HeroLine delay={START + 0.08}>10 Year Reserve Fund Plans</HeroLine>{" "}
-            <HeroLine delay={START + 0.16}>
-              <span className="text-brand">&amp; Strata Reports</span>
-            </HeroLine>{" "}
-            <HeroLine delay={START + 0.24}>in Western Australia</HeroLine>
-          </h1>
+            <h1 className="h-display mt-7 text-[clamp(2.2rem,4.3vw,3.75rem)] [text-wrap:balance]">
+              <HeroLine delay={START + 0.08}>10 Year Reserve Fund Plans</HeroLine>{" "}
+              <HeroLine delay={START + 0.16}>
+                <span className="text-brand-soft">&amp; Strata Reports</span>
+              </HeroLine>{" "}
+              <HeroLine delay={START + 0.24}>in Western Australia</HeroLine>
+            </h1>
 
-          {/* slogan: a styled subheading, not a heading */}
-          <p
-            className="h-title mt-6 text-[clamp(1.3rem,2.2vw,1.75rem)] text-ink"
-          >
-            Accurate. Practical.{" "}
-            <span className="relative inline-block text-brand">
-              Easy to read.
-              <svg viewBox="0 0 300 14" className="absolute -bottom-[0.18em] left-0 w-full" preserveAspectRatio="none" aria-hidden="true">
-                <motion.path
-                  d="M2 9 C 70 3, 150 3, 298 8"
-                  fill="none"
-                  stroke="var(--color-brand-soft)"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ delay: START + 0.9, duration: 1.1, ease: easeInOut }}
-                />
-              </svg>
-            </span>
-          </p>
-
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-graphite">
-            Reserve fund plans, building insurance valuations, WHS reports and asbestos reports for strata and community schemes.
-            Researched in detail, and written so your council of owners can act on them.
-          </p>
-
-          <div style={at(START + 0.45)} className="rise mt-9 flex flex-wrap gap-3">
-            <Button href={contact.quote}>Request a quote</Button>
-            <Button href={contact.phoneHref} tone="ghost">
-              {contact.phone}
-            </Button>
-          </div>
-
-          <div
-            style={at(START + 0.6)}
-            className="rise mt-12 grid max-w-lg grid-cols-3 divide-x divide-line border-t border-line pt-6"
-          >
-            {[
-              ["40+", "Years of experience", "Over 40 years of experience"],
-              ["30,000+", "Strata schemes inspected", `Inspected ${facts.schemesInspected} strata schemes in Australia`],
-              [facts.indemnityShort, "Indemnity cover", `${facts.indemnity} professional indemnity cover`],
-            ].map(([v, l, phrase], i) => (
-              <div key={l} role="group" aria-label={phrase} className={i ? "pl-4 sm:pl-6" : "pr-4"}>
-                <p className="h-title text-2xl text-ink sm:text-[1.7rem]">{v}</p>{" "}
-                <p className="mt-1 text-[13px] leading-snug text-mute">{l}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* photo + floating cards */}
-        <div className="relative mx-auto w-full max-w-[34rem] lg:max-w-none">
-          <div
-            style={at(START - 0.1)}
-            className="clip-in relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-navy shadow-[var(--shadow-lift)]"
-          >
-            <motion.div style={{ y: imgY, scale: 1.06 }} className="absolute inset-0">
-              <Image src={buildingPhoto} alt="A multi-storey strata apartment building" fill priority fetchPriority="high" sizes="(min-width: 1024px) 45vw, (min-width: 640px) 34rem, 100vw" className="object-cover" />
-            </motion.div>
-            <div className="absolute inset-0 bg-gradient-to-t from-navy/50 via-transparent to-transparent" />
-          </div>
-
-          {/* floating turnaround chip */}
-          <motion.div
-            data-reveal
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: START + 0.9, duration: 0.9, ease }}
-            className="absolute top-6 -right-2 sm:top-10 sm:-right-6"
-          >
-            <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="glass flex items-center gap-3 rounded-2xl px-4 py-3 shadow-[var(--shadow-soft)] ring-1 ring-white/60">
-              <span className="grid size-9 place-items-center rounded-full bg-brand text-white">
-                <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <circle cx="12" cy="12" r="8.5" />
-                  <path d="M12 7.5V12l3 2" />
+            <p className="h-title mt-6 text-[clamp(1.25rem,2.1vw,1.65rem)] text-white">
+              Accurate. Practical.{" "}
+              <span className="relative inline-block text-brand-soft">
+                Easy to read.
+                <svg viewBox="0 0 300 14" className="absolute -bottom-[0.18em] left-0 w-full" preserveAspectRatio="none" aria-hidden="true">
+                  <motion.path
+                    d="M2 9 C 70 3, 150 3, 298 8"
+                    fill="none"
+                    stroke="var(--color-brand)"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ delay: START + 0.9, duration: 1.1, ease: easeInOut }}
+                  />
                 </svg>
               </span>
-              <span>
-                <span className="block text-[13px] font-bold">3–7 business days</span>
-                <span className="block text-[12px] text-mute">Normal turnaround</span>
-              </span>
-            </motion.div>
-          </motion.div>
+            </p>
 
-          {/* glass report card */}
-          <motion.div style={{ y: cardY }} className="absolute -bottom-8 left-3 w-[min(21rem,86%)] sm:-left-8 lg:-left-12">
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/80">
+              Reserve fund plans, building insurance valuations, WHS reports and asbestos reports for strata and community schemes. Researched in detail,
+              and written so your council of owners can act on them.
+            </p>
+
+            <div style={at(START + 0.45)} className="rise mt-9 flex flex-wrap gap-3">
+              <Button href={contact.quote}>Request a quote</Button>
+              <Button href={contact.phoneHref} tone="ghost-light">
+                {contact.phone}
+              </Button>
+            </div>
+          </div>
+
+          {/* glass plan card */}
+          <motion.div style={{ y: cardY }} className="w-full max-w-[24rem] lg:ml-auto">
             <motion.div
               data-reveal
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: START + 0.7, duration: 1, ease }}
-              className="glass rounded-[1.5rem] p-5 shadow-[var(--shadow-lift)] ring-1 ring-white/70"
+              className="glass rounded-card p-5 text-ink shadow-[var(--shadow-lift)] ring-1 ring-white/70"
             >
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2.5">
-                  <span className="grid size-8 place-items-center rounded-full bg-navy text-white">
+                  <span className="grid size-8 place-items-center rounded-md bg-navy text-white">
                     <Mark className="size-4" />
                   </span>
-                  <span className="text-[13px] font-bold leading-tight">
+                  <span className="text-[13px] leading-tight font-bold">
                     10 Year Reserve Fund Plan
                     <span className="block font-medium text-mute">Strata Plan · WA</span>
                   </span>
                 </span>
-                <span className="rounded-full bg-[#fbe9e5] px-2.5 py-1 text-[11px] font-bold text-brand">Example</span>
+                <span className="rounded-md bg-[#fbe9e5] px-2.5 py-1 text-[11px] font-bold text-brand">Example</span>
               </div>
               <p className="eyebrow mt-5 !text-[0.65rem] text-mute">Annual reserve contribution</p>
               <p className="h-display mt-1 text-[2.1rem] tabular-nums" aria-label="Example annual reserve contribution: $48,500">
                 <Counter to={48500} prefix="$" group duration={2.4} />
               </p>
-              <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-ink/8">
-                <motion.div initial={{ width: 0 }} animate={{ width: "100%" }} transition={{ delay: START + 1.2, duration: 1.6, ease }} className="h-full rounded-full bg-gradient-to-r from-brand to-brand-soft" />
+              {/* ten yearly bars: steady contributions, the plan's signature */}
+              <div className="mt-4 flex h-12 items-end gap-1.5" aria-hidden="true">
+                {[34, 40, 46, 52, 58, 64, 70, 76, 84, 92].map((h, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ scaleY: 0 }}
+                    animate={{ scaleY: 1 }}
+                    transition={{ delay: START + 1.1 + i * 0.06, duration: 0.6, ease }}
+                    className={`flex-1 origin-bottom rounded-[3px] ${i === 9 ? "bg-brand" : "bg-brand-soft"}`}
+                    style={{ height: `${h}%` }}
+                  />
+                ))}
               </div>
               <p className="mt-2.5 flex justify-between text-[12px] text-mute">
-                <span>10 years funded, no special levy</span>
-                <span className="font-bold text-brand">100%</span>
+                <span>Years 1–10 funded, no special levy</span>
+                <span className="font-bold text-brand">10 yrs</span>
               </p>
             </motion.div>
           </motion.div>
         </div>
+
+        {/* figures strip along the bottom of the photo */}
+        <div className="relative border-t border-white/15 bg-navy/40 backdrop-blur-sm">
+          <div className="wrap grid grid-cols-2 divide-white/15 py-5 sm:grid-cols-4 sm:divide-x">
+            {[
+              ["40+", "Years of experience", "Over 40 years of experience"],
+              ["30,000+", "Strata schemes inspected", `Inspected ${facts.schemesInspected} strata schemes in Australia`],
+              [facts.indemnityShort, "Indemnity cover", `${facts.indemnity} professional indemnity cover`],
+              ["3–7", "Business days turnaround", `Normal turnaround ${facts.turnaround}`],
+            ].map(([v, l, phrase], i) => (
+              <div key={l} role="group" aria-label={phrase} className={`py-2 ${i ? "sm:pl-6" : ""}`}>
+                <p className="h-title text-2xl text-white sm:text-[1.7rem]">{v}</p>{" "}
+                <p className="mt-1 text-[13px] leading-snug text-white/70">{l}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* service ticker */}
-      <div style={at(START + 0.8)} className="rise border-y border-line py-5">
+      <div style={at(START + 0.8)} className="rise border-b border-line bg-white py-5">
         <Marquee>
           {[...services, ...services].map((s, i) => (
             <span key={i} aria-hidden={i >= services.length ? "true" : undefined} className="flex items-center gap-10 pr-10 text-[15px] font-semibold whitespace-nowrap text-graphite">
@@ -292,7 +271,7 @@ export function SpotCard({ k, href, className = "", children }: { k: DiamondKey;
         e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
         e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
       }}
-      className={`group relative block h-full overflow-hidden rounded-[1.75rem] bg-white ring-1 ring-line transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] ${className}`}
+      className={`group relative block h-full overflow-hidden rounded-card bg-white ring-1 ring-line transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] ${className}`}
       style={{ ["--glow" as string]: tones[k].tint }}
     >
       <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: "radial-gradient(420px circle at var(--mx,50%) var(--my,50%), var(--glow), transparent 70%)" }} />
@@ -317,7 +296,7 @@ export function Feature() {
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         <motion.div style={{ clipPath: clip }} className="absolute inset-0 bg-navy">
           <motion.div style={{ scale }} className="absolute inset-0">
-            <Image src={skylinePhoto} alt="" fill sizes="100vw" className="object-cover" />
+            <Photo k="perthSunset" decorative fill sizes="100vw" className="object-cover" />
           </motion.div>
           {/* the skyline photo is brighter than the old one, so a touch more shade, mostly behind the text */}
           <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/55 to-navy/20" />
@@ -349,7 +328,7 @@ export function Numbers() {
         <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s, i) => (
             <FadeUp key={s.label} delay={i * 0.07} className="h-full">
-              <div role="group" aria-label={s.phrase} className="flex h-full flex-col justify-between rounded-[1.5rem] bg-white p-7 ring-1 ring-line">
+              <div role="group" aria-label={s.phrase} className="flex h-full flex-col justify-between rounded-card bg-white p-7 ring-1 ring-line">
                 <span className="flex items-center justify-between" aria-hidden="true">
                   <span className="text-sm font-semibold text-mute tabular-nums">0{i + 1}</span>
                   <Mark mono className="size-5 text-ink/15" />
@@ -384,7 +363,7 @@ export function Calculator() {
 
   return (
     <section className="px-3 sm:px-5">
-      <div className="mx-auto max-w-[90rem] rounded-[2rem] bg-mist py-16 sm:rounded-[2.5rem] sm:py-22">
+      <div className="mx-auto max-w-[90rem] rounded-panel bg-mist py-16 sm:rounded-panel sm:py-22">
         <div className="wrap grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-20">
           <div>
             <Chapter no="04" title="The averaging clause" />
@@ -402,7 +381,7 @@ export function Calculator() {
           </div>
 
           <FadeUp>
-            <div className="grain rounded-[1.75rem] bg-navy p-6 text-white shadow-[var(--shadow-lift)] sm:p-9">
+            <div className="grain rounded-card bg-navy p-6 text-white shadow-[var(--shadow-lift)] sm:p-9">
               <div className="grid gap-7">
                 <Slider id="calc-replacement" label="True replacement cost" value={fmt(replacement)} min={1_000_000} max={30_000_000} step={500_000} v={replacement} onChange={setReplacement} />
                 <Slider id="calc-insured" label="Your sum insured" value={`${fmt(insured)} · ${insuredPct}%`} min={40} max={110} step={1} v={insuredPct} onChange={setInsuredPct} />
@@ -492,7 +471,7 @@ export function Coverage({ no = "05" }: { no?: string }) {
         <Head no={no} title="Coverage" lines={["Where we", <span key="r" className="text-brand">prepare reports.</span>]} text="Based in Applecross, Perth. Choose Western Australia or South Australia to see the reports we prepare there." />
         <div className="mt-11 grid items-stretch gap-4 lg:grid-cols-[1fr_1.15fr]">
           <FadeUp className="h-full">
-            <div className="flex h-full flex-col rounded-[1.75rem] bg-white p-7 ring-1 ring-line sm:p-9">
+            <div className="flex h-full flex-col rounded-card bg-white p-7 ring-1 ring-line sm:p-9">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div key={st.code} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35, ease }}>
                   <span className="rounded-full bg-brand px-3 py-1.5 text-[12px] font-bold text-white">{st.code}</span>
@@ -521,7 +500,7 @@ export function Coverage({ no = "05" }: { no?: string }) {
           </FadeUp>
 
           <FadeUp delay={0.08} className="h-full">
-            <div className="h-full rounded-[1.75rem] bg-white p-3 ring-1 ring-line sm:p-4">
+            <div className="h-full rounded-card bg-white p-3 ring-1 ring-line sm:p-4">
               <svg viewBox={AU_VIEWBOX} className="mx-auto h-full max-h-[34rem] w-full" role="group" aria-label="Map of Australia: choose Western Australia or South Australia">
                 {/* ACT is drawn last so it sits on top of NSW */}
                 {Object.keys(AU_PATHS)
@@ -608,7 +587,7 @@ export function Article() {
           <div className="grid gap-4 sm:grid-cols-2">
             {values.map((v, i) => (
               <FadeUp key={v.title} delay={(i % 2) * 0.08} className={i % 2 ? "sm:translate-y-10" : ""}>
-                <div className="group h-full rounded-[1.5rem] bg-white p-7 ring-1 ring-line transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]">
+                <div className="group h-full rounded-card bg-white p-7 ring-1 ring-line transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]">
                   <span className="grid size-11 place-items-center rounded-full transition-transform duration-700 group-hover:rotate-90" style={{ background: tones[v.key].tint, color: tones[v.key].text }}>
                     <Mark className="size-5" />
                   </span>
@@ -714,7 +693,7 @@ export function Quotes() {
             className="flex cursor-grab gap-4 active:cursor-grabbing"
           >
             {homeQuotes.map((t, i) => (
-              <figure key={t.name} className="flex w-[19rem] shrink-0 flex-col justify-between rounded-[1.75rem] bg-white p-7 ring-1 ring-line select-none sm:w-[25rem] sm:p-8">
+              <figure key={t.name} className="flex w-[19rem] shrink-0 flex-col justify-between rounded-card bg-white p-7 ring-1 ring-line select-none sm:w-[25rem] sm:p-8">
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="flex gap-0.5 text-brand" aria-hidden="true">
@@ -766,8 +745,10 @@ export function Closing() {
   const rot = useTransform(scrollYProgress, [0, 1], [-30, 30]);
   return (
     <section ref={ref} className="px-3 pb-3 sm:px-5 sm:pb-5">
-      <div className="grain relative mx-auto max-w-[90rem] overflow-hidden rounded-[2rem] bg-navy py-16 text-white sm:rounded-[2.5rem] sm:py-22">
-        <div className="pointer-events-none absolute -top-40 -left-20 size-[40rem] rounded-full bg-[radial-gradient(circle,rgb(200_51_26/0.38),transparent_65%)]" />
+      <div className="grain relative mx-auto max-w-[90rem] overflow-hidden rounded-panel bg-navy py-16 text-white sm:rounded-panel sm:py-22">
+        {/* Reserve Fund Plans: Perth skyline behind the closing call to action */}
+        <Photo k="perthDay" decorative fill sizes="(min-width: 1440px) 90rem, 100vw" className="object-cover opacity-45" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy via-navy/85 to-navy/40" />
         <motion.div style={{ rotate: rot }} className="pointer-events-none absolute -right-48 -bottom-48 w-[40rem]">
           <Mark line className="w-full text-white/[0.07]" />
         </motion.div>
@@ -777,7 +758,7 @@ export function Closing() {
           <ol className="mt-11 grid gap-3 md:grid-cols-3">
             {steps.map((s, i) => (
               <FadeUp as="li" key={s.title} delay={i * 0.08} className="h-full list-none">
-                <div className="h-full rounded-[1.5rem] bg-white/[0.06] p-7 ring-1 ring-white/10 backdrop-blur-sm">
+                <div className="h-full rounded-card bg-white/[0.06] p-7 ring-1 ring-white/10 backdrop-blur-sm">
                   <span className="grid size-10 place-items-center rounded-full bg-brand text-sm font-bold text-white">{i + 1}</span>
                   <h3 className="h-title mt-8 text-xl">{s.title}</h3>
                   <p className="mt-2 leading-relaxed text-white/75">{s.body}</p>

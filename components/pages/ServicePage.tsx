@@ -35,7 +35,7 @@ export function ServicePage({ service: s }: { service: Service }) {
       <section className="pt-4 sm:pt-5">
         <dl className="wrap grid grid-cols-2 gap-3 lg:grid-cols-4">
           {s.facts.map((f, i) => (
-            <FadeUp key={f.label} delay={i * 0.06} className="h-full rounded-[1.25rem] bg-white p-5 ring-1 ring-line sm:p-6">
+            <FadeUp key={f.label} delay={i * 0.06} className="h-full rounded-card bg-white p-5 ring-1 ring-line sm:p-6">
               <dt className="flex items-center gap-2 text-[13px] text-mute">
                 <span aria-hidden="true" className="size-1.5 rounded-full" style={{ background: diamonds[s.key] }} />
                 {f.label}
@@ -72,13 +72,13 @@ export function ServicePage({ service: s }: { service: Service }) {
       <section className="px-3 sm:px-5">
         <div className="wrap grid gap-4 lg:grid-cols-2">
           <FadeUp className="h-full">
-            <div className="h-full rounded-[1.75rem] bg-white p-8 ring-1 ring-line sm:p-10">
+            <div className="h-full rounded-card bg-white p-8 ring-1 ring-line sm:p-10">
               <h2 className="h-title text-[clamp(1.5rem,2.6vw,2rem)]">Further services</h2>
               <p className="mt-4 text-[1.05rem] leading-relaxed text-graphite">{s.further}</p>
             </div>
           </FadeUp>
           <FadeUp delay={0.08} className="h-full">
-            <div className="grain h-full rounded-[1.75rem] bg-navy p-8 text-white sm:p-10">
+            <div className="grain h-full rounded-card bg-navy p-8 text-white sm:p-10">
               <h2 className="h-title text-[clamp(1.5rem,2.6vw,2rem)]">Turnaround time and fees</h2>
               <p className="mt-4 text-[1.05rem] leading-relaxed text-white/75">{turnaround}</p>
             </div>
@@ -131,12 +131,12 @@ function Detail({ s }: { s: Service }) {
 
   return (
     <section className="px-3 sm:px-5">
-      <div className="mx-auto max-w-[90rem] rounded-[2rem] bg-white py-16 ring-1 ring-line sm:rounded-[2.5rem] sm:py-22">
+      <div className="mx-auto max-w-[90rem] rounded-panel bg-white py-16 ring-1 ring-line sm:rounded-panel sm:py-22">
         <div className="wrap">
           <SectionHead no="02" title="In detail" lines={["Everything in the report,", "explained."]} />
           <div className="mt-11 grid gap-12 lg:grid-cols-[.6fr_1.4fr] lg:gap-20">
             <aside className="hidden lg:block">
-              <div className="sticky top-28 rounded-[1.5rem] bg-canvas p-3">
+              <div className="sticky top-28 rounded-card bg-canvas p-3">
                 <h3 className="eyebrow px-3 pt-2 pb-3 text-mute">Contents</h3>
                 <ol className="grid gap-0.5">
                   {s.sections.map((sec, i) => (
@@ -214,7 +214,7 @@ function Order({ s }: { s: Service }) {
           <LineReveal className="h-display mt-6 text-[clamp(2.1rem,4.4vw,3.8rem)] [text-wrap:balance]" lines={[s.order.title]} />
           <FadeUp>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-graphite">{s.order.intro}</p>
-            <div className="mt-8 rounded-[1.5rem] bg-navy p-6 text-white">
+            <div className="mt-8 rounded-card bg-navy p-6 text-white">
               <p className="h-display text-[2.4rem] text-brand-soft">{facts.turnaround}</p>
               <p className="mt-2 leading-relaxed text-white/75">Normal turnaround</p>
             </div>
@@ -250,7 +250,7 @@ function Step({ i, text, k }: { i: number; text: string; k: DiamondKey }) {
       >
         {String(i + 1).padStart(2, "0")}
       </motion.span>
-      <motion.p initial={false} animate={{ opacity: seen ? 1 : 0.8, x: seen ? 0 : 8 }} transition={{ duration: 0.6, ease }} className="rounded-[1.25rem] bg-white p-5 text-[1.05rem] leading-relaxed font-medium ring-1 ring-line sm:p-6">
+      <motion.p initial={false} animate={{ opacity: seen ? 1 : 0.8, x: seen ? 0 : 8 }} transition={{ duration: 0.6, ease }} className="rounded-card bg-white p-5 text-[1.05rem] leading-relaxed font-medium ring-1 ring-line sm:p-6">
         {text}
       </motion.p>
     </li>
@@ -261,7 +261,7 @@ function Step({ i, text, k }: { i: number; text: string; k: DiamondKey }) {
 function SpecialBlock({ special, k }: { special: Special; k: DiamondKey }) {
   return (
     <section className="px-3 pt-4 sm:px-5 sm:pt-5">
-      <div className="mx-auto max-w-[90rem] rounded-[2rem] bg-mist py-16 sm:rounded-[2.5rem] sm:py-22">
+      <div className="mx-auto max-w-[90rem] rounded-panel bg-mist py-16 sm:rounded-panel sm:py-22">
         <div className="wrap">
           {special.kind === "frequency" && <Frequency sp={special} k={k} />}
           {special.kind === "consider" && <Consider sp={special} k={k} />}
@@ -288,7 +288,7 @@ function Frequency({ sp }: { sp: Extract<Special, { kind: "frequency" }>; k: Dia
     <>
       <SectionHead no="03" title="Revaluation guide" lines={[sp.title]} text={sp.intro} />
       <div className="mt-11 grid gap-4 lg:grid-cols-[1fr_1.05fr]">
-        <ul className="grid gap-1 rounded-[1.75rem] bg-white p-2 ring-1 ring-line" aria-label="Property type">
+        <ul className="grid gap-1 rounded-card bg-white p-2 ring-1 ring-line" aria-label="Property type">
           {sp.rows.map((r, n) => (
             <li key={r.type}>
               <button
@@ -305,7 +305,7 @@ function Frequency({ sp }: { sp: Extract<Special, { kind: "frequency" }>; k: Dia
             </li>
           ))}
         </ul>
-        <div className="grain rounded-[1.75rem] bg-navy p-7 text-white sm:p-10 lg:sticky lg:top-28 lg:self-start">
+        <div className="grain rounded-card bg-navy p-7 text-white sm:p-10 lg:sticky lg:top-28 lg:self-start">
           <p className="text-[14px] text-white/75">Recommended minimum</p>
           <AnimatePresence mode="wait" initial={false}>
             <motion.p key={row.every} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.4, ease }} className="h-display mt-3 text-[clamp(2.6rem,5.6vw,4.6rem)] text-brand-soft">
@@ -354,7 +354,7 @@ function Consider({ sp, k }: { sp: Extract<Special, { kind: "consider" }>; k: Di
           <motion.li
             key={p}
             {...reveal(still, { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, { delay: (n % 5) * 0.05, duration: 0.6, ease })}
-            className="flex min-h-36 flex-col justify-between gap-6 rounded-[1.25rem] bg-white p-5 ring-1 ring-line"
+            className="flex min-h-36 flex-col justify-between gap-6 rounded-card bg-white p-5 ring-1 ring-line"
           >
             <Check color={t.text} className="size-7" /> <span className="font-semibold leading-snug">{p}</span>
           </motion.li>
@@ -362,13 +362,13 @@ function Consider({ sp, k }: { sp: Extract<Special, { kind: "consider" }>; k: Di
       </ul>
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
         <FadeUp className="h-full">
-          <div className="grain h-full rounded-[1.75rem] bg-navy p-8 text-white sm:p-12">
+          <div className="grain h-full rounded-card bg-navy p-8 text-white sm:p-12">
             <h3 className="text-[14px] font-semibold text-white/75">{sp.goal}</h3>
             <p className="h-display mt-5 text-[clamp(1.8rem,3.4vw,2.8rem)] text-brand-soft">{sp.is}</p>
           </div>
         </FadeUp>
         <FadeUp delay={0.1} className="h-full">
-          <div className="h-full rounded-[1.75rem] bg-white p-8 ring-1 ring-line sm:p-12">
+          <div className="h-full rounded-card bg-white p-8 ring-1 ring-line sm:p-12">
             <h3 className="text-[14px] font-semibold text-mute">{sp.isNotTitle}</h3>
             <ul className="mt-5 grid gap-4">
               {sp.isNot.map((n, j) => (
@@ -414,9 +414,9 @@ function Hazards({ sp, k }: { sp: Extract<Special, { kind: "hazards" }>; k: Diam
           <motion.div
             key={h}
             {...reveal(still, { opacity: 0, y: 30 }, { opacity: 1, y: 0 }, { delay: n * 0.07, duration: 0.8, ease })}
-            className="group relative flex aspect-square flex-col justify-between overflow-hidden rounded-[1.5rem] bg-white p-6 ring-1 ring-line transition-colors duration-500 hover:text-white"
+            className="group relative flex aspect-square flex-col justify-between overflow-hidden rounded-card bg-white p-6 ring-1 ring-line transition-colors duration-500 hover:text-white"
           >
-            <span className="absolute inset-0 origin-bottom scale-y-0 rounded-[1.5rem] bg-brand transition-transform duration-500 ease-[cubic-bezier(.76,0,.24,1)] group-hover:scale-y-100" />
+            <span className="absolute inset-0 origin-bottom scale-y-0 rounded-card bg-brand transition-transform duration-500 ease-[cubic-bezier(.76,0,.24,1)] group-hover:scale-y-100" />
             <span aria-hidden="true" className="relative grid size-14 place-items-center rounded-full transition-colors duration-500 group-hover:!bg-white/10 group-hover:!text-white" style={{ background: t.tint, color: t.text }}>
               <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 {hazardIcons[h]}
@@ -440,7 +440,7 @@ function Penalties({ sp, k }: { sp: Extract<Special, { kind: "penalties" }>; k: 
       <div className="mt-11 grid gap-3">
         {sp.rows.map((r, n) => (
           <FadeUp key={r.category} delay={n * 0.08}>
-            <div className="grid gap-6 rounded-[1.5rem] bg-white p-6 ring-1 ring-line sm:p-8 lg:grid-cols-[1fr_1.4fr] lg:gap-14">
+            <div className="grid gap-6 rounded-card bg-white p-6 ring-1 ring-line sm:p-8 lg:grid-cols-[1fr_1.4fr] lg:gap-14">
               <div>
                 <h3 className="inline-flex rounded-full px-3 py-1.5 text-[12px] font-bold" style={{ background: tones[k].tint, color: tones[k].text }}>
                   {r.category}

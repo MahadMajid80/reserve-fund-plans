@@ -14,7 +14,7 @@ This is what the site does to stay secure, fast and free of spam, and what to sw
 ### HTTP security headers (`next.config.mjs`, on every response)
 | Header | Value / purpose |
 |---|---|
-| Content-Security-Policy | Scripts, frames and requests are allowed only from this site, Google reCAPTCHA, Google Analytics and the Vercel preview toolbar. Also sets `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`, `frame-ancestors 'none'` and `upgrade-insecure-requests`. |
+| Content-Security-Policy | Scripts, frames and requests are allowed only from this site, Google reCAPTCHA, Google Analytics and the Vercel preview toolbar; images also from `images.unsplash.com` (building photos). Also sets `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`, `frame-ancestors 'none'` and `upgrade-insecure-requests`. |
 | Strict-Transport-Security | `max-age=31536000`: HTTPS only. `includeSubDomains`/`preload` are left off so other subdomains (e.g. mail) are not affected. Add them later if every subdomain is on HTTPS. |
 | X-Frame-Options | `DENY`: the site can't be framed (clickjacking). |
 | X-Content-Type-Options | `nosniff` |
@@ -91,7 +91,8 @@ intro and headline animations (the same design as BIV). Real-user Core Web Vital
 
 What keeps it fast:
 - Static HTML on Vercel's CDN.
-- A self-hosted variable font with a metric-matched fallback.
+- Self-hosted variable fonts (Sora, Manrope) with metric-matched fallbacks.
+- Building photos resized and converted to AVIF/WebP by Unsplash's CDN, at the size each screen needs.
 - CSS above-the-fold animations, so nothing waits on JavaScript.
 - AVIF/WebP responsive images through `next/image`, cached for 30 days.
 - Week-long browser caching for `/public` images.

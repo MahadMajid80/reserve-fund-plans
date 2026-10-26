@@ -7,13 +7,23 @@ import { JsReady, RouteScrollReset, ScrollProgress, SmoothScroll } from "@/compo
 import { OG_IMAGE } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
-// Self-hosted variable font (latin subset), font-display: swap, with a metric-matched fallback to limit layout shift.
-const jakarta = localFont({
-  src: "./fonts/PlusJakartaSans-latin-var.woff2",
+// Self-hosted variable fonts (latin subset), font-display: swap, with metric-matched fallbacks to limit layout shift.
+// Reserve Fund Plans uses Sora for headings and Manrope for text (BIV uses Plus Jakarta Sans for both).
+const sora = localFont({
+  src: "./fonts/Sora-latin-var.woff2",
+  weight: "100 800",
+  style: "normal",
+  display: "swap",
+  variable: "--font-sora",
+  fallback: ["ui-sans-serif", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+  adjustFontFallback: "Arial",
+});
+const manrope = localFont({
+  src: "./fonts/Manrope-latin-var.woff2",
   weight: "200 800",
   style: "normal",
   display: "swap",
-  variable: "--font-jakarta",
+  variable: "--font-manrope",
   fallback: ["ui-sans-serif", "system-ui", "Segoe UI", "Arial", "sans-serif"],
   adjustFontFallback: "Arial",
 });
@@ -34,7 +44,7 @@ export const viewport: Viewport = { themeColor: "#141414" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-AU" className={jakarta.variable}>
+    <html lang="en-AU" className={`${sora.variable} ${manrope.variable}`}>
       <body>
         {/* Without JavaScript: show everything that would otherwise animate in, and skip the intro overlays. */}
         <noscript>

@@ -42,7 +42,7 @@ export function ContactPage() {
       />
       <section className="pb-18 sm:pb-24">
         <div className="wrap grid gap-4 lg:grid-cols-[1.55fr_1fr]">
-          <div className="rounded-[2rem] bg-white p-6 ring-1 ring-line sm:p-10 lg:p-12">
+          <div className="rounded-panel bg-white p-6 ring-1 ring-line sm:p-10 lg:p-12">
             <h2 className="eyebrow text-brand">Send us a message</h2>
             <div className="mt-6">
               <QuoteForm source="contact-us" />
@@ -70,7 +70,7 @@ export function QuotePage() {
       />
       <section className="pb-18 sm:pb-24">
         <div className="wrap grid gap-4 lg:grid-cols-[1.55fr_1fr]">
-          <div className="rounded-[2rem] bg-white p-6 ring-1 ring-line sm:p-10 lg:p-12">
+          <div className="rounded-panel bg-white p-6 ring-1 ring-line sm:p-10 lg:p-12">
             <h2 className="eyebrow text-brand">Job description</h2>
             <div className="mt-6">
               <QuoteForm source="quote-request" />
@@ -86,7 +86,7 @@ export function QuotePage() {
 function ContactPanel() {
   return (
     <aside aria-label="Contact details">
-      <div className="grain overflow-hidden rounded-[2rem] bg-navy p-7 text-white sm:p-10 lg:sticky lg:top-28">
+      <div className="grain overflow-hidden rounded-panel bg-navy p-7 text-white sm:p-10 lg:sticky lg:top-28">
         <Mark className="size-10" />
         <h2 className="mt-10 text-[14px] text-white/75">Call us</h2>
         <a href={contact.phoneHref} className="h-display mt-2 block py-1 text-[clamp(2rem,3.4vw,2.8rem)] tabular-nums transition-colors hover:text-brand-soft">

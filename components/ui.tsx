@@ -244,7 +244,7 @@ export function Label({ children, className = "", dark }: { children: React.Reac
 /** A soft pill chip. */
 export function Chip({ children, className = "", dark = false }: { children: React.ReactNode; className?: string; dark?: boolean }) {
   return (
-    <span className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] font-semibold ${dark ? "bg-white/10 text-white/85 ring-1 ring-white/15" : "bg-white text-graphite ring-1 ring-line"} ${className}`}>
+    <span className={`inline-flex items-center gap-2 rounded-md px-3.5 py-1.5 text-[13px] font-semibold ${dark ? "bg-white/10 text-white/85 ring-1 ring-white/15" : "bg-white text-graphite ring-1 ring-line"} ${className}`}>
       {children}
     </span>
   );
@@ -362,10 +362,10 @@ export function Button({ href, children, tone = "blue", className = "", arrow = 
   return (
     <Magnetic>
       {/* Version 2 (Changes by Asad): larger content buttons; the menu uses its own, smaller buttons */}
-      <A href={href} className={`group inline-flex items-center gap-3.5 rounded-full py-2.5 text-[16px] font-semibold transition-colors duration-300 sm:text-[17px] ${arrow ? "pr-2.5 pl-7" : "px-7 py-4"} ${t.base} ${className}`}>
+      <A href={href} className={`group inline-flex items-center gap-3.5 rounded-lg py-2.5 text-[16px] font-semibold transition-colors duration-300 sm:text-[17px] ${arrow ? "pr-2.5 pl-7" : "px-7 py-4"} ${t.base} ${className}`}>
         <span className={arrow ? "py-1.5" : ""}>{children}</span>
         {arrow && (
-          <span className={`relative grid size-10 place-items-center overflow-hidden rounded-full transition-colors duration-300 sm:size-11 ${t.dot}`}>
+          <span className={`relative grid size-10 place-items-center overflow-hidden rounded-md transition-colors duration-300 sm:size-11 ${t.dot}`}>
             {href.startsWith("tel:") ? (
               /* call buttons show a phone icon that gives a little ring on hover */
               <span className="transition-transform duration-500 group-hover:-rotate-12">

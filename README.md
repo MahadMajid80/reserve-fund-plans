@@ -1,6 +1,6 @@
 # Reserve Fund Plans website (Next.js)
 
-The rebuild of [reservefundplans.com.au](https://www.reservefundplans.com.au). It uses the **same design, components and code as the BIV Reports site**, with the Reserve Fund Plans colour scheme and content. Every page URL from the old WordPress site is kept.
+The rebuild of [reservefundplans.com.au](https://www.reservefundplans.com.au). It is built on the **BIV Reports site's components and code**, with its own look: the Reserve Fund Plans colours, different fonts, squarer shapes, a full-width photo hero and photos of Australian high-rises. Every page URL from the old WordPress site is kept.
 
 **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Framer Motion · Lenis · nodemailer
 
@@ -30,6 +30,20 @@ Taken from the live reservefundplans.com.au site:
 | `oxblood` | `#CC222E` | Asbestos Reports (diamond icon) |
 
 The logo in `public/rfp-logo.svg` is a stand-in redrawn from the yellow-on-black logo until the original file is supplied.
+
+## How it differs from BIV
+
+| | BIV Reports | Reserve Fund Plans |
+|---|---|---|
+| Fonts | Plus Jakarta Sans | Sora (headings) + Manrope (text), self-hosted |
+| Shapes | Very rounded panels (1.5–2.5rem), pill buttons | Squarer: 0.75–1rem panels, square-cornered buttons and menu |
+| Homepage hero | Split: text left, rounded photo right | Full-width Perth photo (Elizabeth Quay) with text over a dark wash, plus a figures strip |
+| Photos | One building photo, Sydney skyline | Australian high-rises: Elizabeth Quay and Kings Park (Perth), residential and glass towers |
+| Closing panels | Plain dark panel | Perth skyline photo behind the call to action |
+
+## Photos
+
+`lib/photos.ts` lists every photo. They are free to use under the [Unsplash License](https://unsplash.com/license) and load from Unsplash's image CDN (`images.unsplash.com`), which resizes them and serves AVIF/WebP. Credits are on `/legal/`. To swap a photo, change its `src` in `lib/photos.ts` (any `images.unsplash.com/photo-…` address works).
 
 ## Where things live
 

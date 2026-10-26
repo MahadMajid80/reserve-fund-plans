@@ -38,4 +38,4 @@ Each item is marked in the code with `TODO [ASK]` (mostly in `lib/site.ts`). Not
 
 ## Brand assets
 25. **Logo**: `public/rfp-logo.svg` is redrawn from the yellow-on-black logo. Supply the original artwork (or approve downloading `RFP-WA-Logo-5-Oct-2018.png` from the live site) and it will be swapped in. The old logo URL redirects to the new file.
-26. **Photos**: one building photo is used (`UEV-IMG_9964.jpg`, the same photo used on both old sites), including behind the "Plan ahead, or pay later" statement where BIV uses a Sydney skyline. A Perth skyline or WA strata photo would suit better there.
+26. **Photos**: six photos of Australian high-rises from Unsplash (free licence, credited on /legal/) now replace the single building photo. Three are of Perth (Elizabeth Quay, Kings Park by day and at sunset); the others are Australian towers. Swap in photos of schemes you have inspected if you have them (with permission).

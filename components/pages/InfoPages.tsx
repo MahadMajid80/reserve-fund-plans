@@ -1,15 +1,16 @@
 "use client";
 
+import { Photo } from "../Photo";
+import { photos } from "@/lib/photos";
 import { Email } from "@/components/Email";
 import { AnimatePresence, LayoutGroup, motion, useMotionValue, useSpring } from "framer-motion";
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Mark } from "../Diamonds";
 import { Coverage } from "../Home";
 import { FaqList, PageHero, QuoteBand, SectionHead, ServiceCards } from "../PageKit";
 import { A, Arrow, Chapter, Counter, FadeUp, ease, reveal } from "../ui";
 import { useStill } from "@/lib/intro";
-import { buildingPhoto, contact, diamonds, stats, timeline, tones, values } from "@/lib/content";
+import { contact, diamonds, stats, timeline, tones, values } from "@/lib/content";
 import { faqId, services, totalFaqs, type Service } from "@/lib/services";
 import { facts, org, paths } from "@/lib/site";
 import { allTestimonials, tags, testimonialByName, testimonialCount, type Tag } from "@/lib/testimonials";
@@ -31,7 +32,7 @@ export function AboutPage() {
   return (
     <main>
       <PageHero
-        photo
+        photo="glassTower"
         size="md"
         crumbs={[
           ["Home", paths.home],
@@ -55,7 +56,7 @@ export function AboutPage() {
         <div className="wrap grid grid-cols-2 gap-3 lg:grid-cols-4">
           {stats.map((s, i) => (
             <FadeUp key={s.label} delay={i * 0.06} className="h-full">
-              <div role="group" aria-label={s.phrase} className="h-full rounded-[1.5rem] bg-white p-6 ring-1 ring-line sm:p-7">
+              <div role="group" aria-label={s.phrase} className="h-full rounded-card bg-white p-6 ring-1 ring-line sm:p-7">
                 <p>
                   <span className="h-display block text-[clamp(2.2rem,4.4vw,3.6rem)] text-brand">
                     {s.kind === "year" ? <Counter from={1950} to={s.value} duration={2} /> : <Counter to={s.value} prefix={s.prefix} suffix={s.suffix} group={s.value >= 10000} />}
@@ -80,7 +81,7 @@ export function AboutPage() {
           <ol className="mt-11 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {timeline.map((t, i) => (
               <FadeUp as="li" key={t.year} delay={i * 0.08} className="h-full list-none">
-                <div className="h-full rounded-[1.5rem] bg-white p-7 ring-1 ring-line">
+                <div className="h-full rounded-card bg-white p-7 ring-1 ring-line">
                   <span className="flex items-center gap-2" aria-hidden="true">
                     {timeline.map((_, n) => (
                       <span key={n} className={`h-1 rounded-full ${n <= i ? "w-6 bg-brand" : "w-3 bg-ink/10"}`} />
@@ -97,13 +98,13 @@ export function AboutPage() {
 
       {/* values */}
       <section className="px-3 sm:px-5">
-        <div className="mx-auto max-w-[90rem] rounded-[2rem] bg-mist py-16 sm:rounded-[2.5rem] sm:py-22">
+        <div className="mx-auto max-w-[90rem] rounded-panel bg-mist py-16 sm:rounded-panel sm:py-22">
           <div className="wrap">
             <SectionHead no="02" title="Four diamonds" lines={["Our values"]} text="Each diamond in our logo stands for something we hold ourselves to." />
             <div className="mt-11 grid gap-4 md:grid-cols-2">
               {values.map((v, i) => (
                 <FadeUp key={v.title} delay={(i % 2) * 0.1} className="h-full">
-                  <div className="group flex h-full min-h-[18rem] flex-col justify-between rounded-[1.75rem] bg-white p-8 ring-1 ring-line transition-shadow duration-500 hover:shadow-[var(--shadow-lift)] sm:p-10">
+                  <div className="group flex h-full min-h-[18rem] flex-col justify-between rounded-card bg-white p-8 ring-1 ring-line transition-shadow duration-500 hover:shadow-[var(--shadow-lift)] sm:p-10">
                     <span className="flex items-center justify-between" aria-hidden="true">
                       <span className="grid size-12 place-items-center rounded-full transition-transform duration-700 group-hover:rotate-90" style={{ background: tones[v.key].tint, color: tones[v.key].text }}>
                         <Mark className="size-6" />
@@ -138,7 +139,7 @@ export function AboutPage() {
             { dark: false, label: "Our mission", t: "Our mission starts with our clients, by simply making their work easier and enjoyable.", s: "We work together with our clients to achieve a positive and rewarding outcome." },
           ].map((b, i) => (
             <FadeUp key={b.label} delay={i * 0.1} className="h-full">
-              <div className={`relative h-full overflow-hidden rounded-[2rem] p-8 sm:p-12 ${b.dark ? "grain bg-navy text-white" : "bg-white ring-1 ring-line"}`}>
+              <div className={`relative h-full overflow-hidden rounded-panel p-8 sm:p-12 ${b.dark ? "grain bg-navy text-white" : "bg-white ring-1 ring-line"}`}>
                 {b.dark && <Mark line className="pointer-events-none absolute -right-20 -bottom-20 w-80 text-white/[0.07]" />}
                 <h2 className={`eyebrow ${b.dark ? "text-brand-soft" : "text-brand"}`}>{b.label}</h2>
                 <p className="h-display relative mt-8 text-[clamp(1.8rem,3.2vw,2.7rem)]">{b.t}</p>
@@ -151,7 +152,7 @@ export function AboutPage() {
 
       {/* credentials */}
       <section className="px-3 sm:px-5">
-        <div className="grain mx-auto max-w-[90rem] overflow-hidden rounded-[2rem] bg-navy py-16 text-white sm:rounded-[2.5rem] sm:py-22">
+        <div className="grain mx-auto max-w-[90rem] overflow-hidden rounded-panel bg-navy py-16 text-white sm:rounded-panel sm:py-22">
           <div className="wrap">
             <SectionHead dark no="03" title="Credentials" lines={["Qualified, insured", "and independent."]} text="We are not affiliated with any maintenance companies, and our recommendations don’t rely on referrals. Think of us as independent auditors with practical recommendations." />
             <ul className="mt-11 grid gap-3 md:grid-cols-2">
@@ -226,7 +227,7 @@ export function ServicesIndexPage() {
                 className="border-b border-line"
               >
                 <A href={s.path} className="group relative block py-8 sm:py-10">
-                  <span aria-hidden="true" className="absolute inset-y-2 -inset-x-4 scale-y-90 rounded-[1.5rem] bg-white opacity-0 shadow-[var(--shadow-soft)] transition-all duration-500 group-hover:scale-y-100 group-hover:opacity-100 sm:-inset-x-6" />
+                  <span aria-hidden="true" className="absolute inset-y-2 -inset-x-4 scale-y-90 rounded-card bg-white opacity-0 shadow-[var(--shadow-soft)] transition-all duration-500 group-hover:scale-y-100 group-hover:opacity-100 sm:-inset-x-6" />
                   <span className="relative grid items-center gap-5 lg:grid-cols-[4rem_1.3fr_1fr_auto] lg:gap-10">
                     <span className="flex items-center gap-3 lg:block" aria-hidden="true">
                       <span className="text-sm font-semibold text-mute tabular-nums">0{i + 1}</span>
@@ -268,9 +269,9 @@ export function ServicesIndexPage() {
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 exit={{ opacity: 0, scale: 0.6 }}
                 transition={{ duration: 0.45, ease }}
-                className="relative -mt-36 ml-8 h-56 w-44 overflow-hidden rounded-[1.25rem] shadow-[var(--shadow-lift)]"
+                className="relative -mt-36 ml-8 h-56 w-44 overflow-hidden rounded-card shadow-[var(--shadow-lift)]"
               >
-                <Image src={buildingPhoto} alt="" fill sizes="176px" className="object-cover" />
+                <Photo k="apartmentTowers" decorative fill sizes="176px" className="object-cover" />
                 <motion.div key={hover} initial={{ opacity: 0 }} animate={{ opacity: 0.55 }} transition={{ duration: 0.4 }} className="absolute inset-0 mix-blend-multiply" style={{ background: diamonds[services[hover].key] }} />
                 <span className="absolute inset-x-3 bottom-3 rounded-full bg-white/90 px-3 py-1.5 text-center text-[11px] font-bold text-ink">{services[hover].code} · View report</span>
               </motion.div>
@@ -283,7 +284,7 @@ export function ServicesIndexPage() {
       <section className="pb-8">
         <div className="wrap">
           <FadeUp>
-            <figure className="rounded-[2rem] bg-white p-8 ring-1 ring-line sm:p-12">
+            <figure className="rounded-panel bg-white p-8 ring-1 ring-line sm:p-12">
               <blockquote className="max-w-4xl text-[clamp(1.15rem,2vw,1.5rem)] leading-relaxed font-medium text-ink">“{sarah.quote}”</blockquote>
               <figcaption className="mt-6 text-graphite">
                 <span className="font-bold text-ink">{sarah.name}</span>, {sarah.role}
@@ -348,7 +349,7 @@ export function FaqHubPage() {
             {term && ` matching “${q.trim()}”`}
           </p>
           {groups.length === 0 ? (
-            <div className="mt-8 rounded-[1.75rem] bg-white p-10 ring-1 ring-line">
+            <div className="mt-8 rounded-card bg-white p-10 ring-1 ring-line">
               <p className="h-title text-[clamp(1.6rem,3vw,2.2rem)]">No questions match that search.</p>
               <p className="mt-3 text-lg text-graphite">
                 Try another word, or ask us directly on{" "}
@@ -361,7 +362,7 @@ export function FaqHubPage() {
           ) : (
             <div className="mt-8 grid gap-4 md:grid-cols-2">
               {groups.map((g) => (
-                <div key={g.s.slug} className="flex flex-col rounded-[1.75rem] bg-white p-7 ring-1 ring-line sm:p-9">
+                <div key={g.s.slug} className="flex flex-col rounded-card bg-white p-7 ring-1 ring-line sm:p-9">
                   <span aria-hidden="true" className="inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-[12px] font-bold" style={{ background: tones[g.s.key].tint, color: tones[g.s.key].text }}>
                     <span className="size-2 rounded-full" style={{ background: diamonds[g.s.key] }} />
                     {g.s.code}
@@ -432,7 +433,7 @@ export function FaqTopicPage({ service: s }: { service: Service }) {
         <div className="wrap grid gap-6 lg:grid-cols-[1.45fr_.55fr] lg:gap-10">
           <FaqList faqs={s.faq.faqs} k={s.key} level={2} startOpen={0} group={`faq-${s.slug}`} />
           <aside className="grid content-start gap-4 lg:sticky lg:top-28 lg:self-start">
-            <div className="grain rounded-[1.5rem] bg-navy p-7 text-white">
+            <div className="grain rounded-card bg-navy p-7 text-white">
               <Mark className="size-8" />
               <p className="h-title mt-8 text-[1.4rem]">Our {s.name}</p>
               <p className="mt-2 leading-relaxed text-white/75">{s.tagline}</p>
@@ -443,7 +444,7 @@ export function FaqTopicPage({ service: s }: { service: Service }) {
                 </span>
               </A>
             </div>
-            <nav aria-label="Other FAQ's" className="rounded-[1.5rem] bg-white p-3 ring-1 ring-line">
+            <nav aria-label="Other FAQ's" className="rounded-card bg-white p-3 ring-1 ring-line">
               <p className="eyebrow px-3 pt-2 pb-2 text-mute">Other FAQ's</p>
               <ul>
                 {others.map((o) => (
@@ -504,7 +505,7 @@ export function TestimonialsPage() {
 
       {/* featured: the one-hour answer */}
       <section className="px-3 sm:px-5">
-        <div className="grain relative mx-auto max-w-[90rem] overflow-hidden rounded-[2rem] bg-navy py-16 text-white sm:rounded-[2.5rem] sm:py-24">
+        <div className="grain relative mx-auto max-w-[90rem] overflow-hidden rounded-panel bg-navy py-16 text-white sm:rounded-panel sm:py-24">
           <div className="wrap grid gap-10 lg:grid-cols-[1fr_1.5fr] lg:items-center lg:gap-16">
             <FadeUp>
               <Chapter no="01" title="The one-hour answer" dark />
@@ -573,7 +574,7 @@ export function TestimonialsPage() {
                       transition={{ duration: 0.45, ease }}
                       className="mb-4 break-inside-avoid"
                     >
-                      <figure className={`rounded-[1.75rem] p-7 sm:p-8 ${dark ? "grain bg-brand text-white" : "bg-white ring-1 ring-line"}`}>
+                      <figure className={`rounded-card p-7 sm:p-8 ${dark ? "grain bg-brand text-white" : "bg-white ring-1 ring-line"}`}>
                         <ul className="flex flex-wrap gap-1.5" aria-label="Topics">
                           {t.tags.map((x) => (
                             <li key={x} className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${dark ? "bg-white/10 text-white/85" : "bg-canvas text-graphite"}`}>
@@ -704,6 +705,26 @@ const legal: LegalSection[] = [
       "Therefore, we cannot be responsible for the protection and privacy of any information which you provide whilst visiting such sites, and such sites are not governed by this privacy statement. You should exercise caution and look at the privacy statement applicable to the website in question.",
     ],
   },
+  {
+    id: "photo-credits",
+    title: "Photo credits",
+    body: [
+      "Building photographs are used under the Unsplash License, courtesy of these photographers:",
+      <ul key="credits" className="mt-2 grid gap-1">
+        {Object.values(photos).map((p) => (
+          <li key={p.src}>
+            <a href={p.page} rel="noopener noreferrer" className="underline-offset-4 hover:underline">
+              {p.alt}
+            </a>{" "}
+            by{" "}
+            <a href={p.profile} rel="noopener noreferrer" className="font-semibold underline-offset-4 hover:underline">
+              {p.credit}
+            </a>
+          </li>
+        ))}
+      </ul>,
+    ],
+  },
 ];
 
 export function LegalPage() {
@@ -721,7 +742,7 @@ export function LegalPage() {
         <div className="wrap grid gap-10 lg:grid-cols-[.45fr_1.55fr] lg:gap-14">
           <aside>
             <nav aria-label="On this page">
-              <ol className="grid gap-1 rounded-[1.5rem] bg-white p-2 ring-1 ring-line lg:sticky lg:top-28">
+              <ol className="grid gap-1 rounded-card bg-white p-2 ring-1 ring-line lg:sticky lg:top-28">
                 {legal.map((l, i) => (
                   <li key={l.id}>
                     <a href={`#${l.id}`} className="flex min-h-11 items-center gap-3 rounded-xl px-4 py-2.5 font-semibold transition-colors hover:bg-canvas">
@@ -735,7 +756,7 @@ export function LegalPage() {
               </ol>
             </nav>
           </aside>
-          <div className="rounded-[2rem] bg-white p-7 ring-1 ring-line sm:p-12">
+          <div className="rounded-panel bg-white p-7 ring-1 ring-line sm:p-12">
             <p className="text-[15px] text-mute">
               <strong className="text-ink">Last updated:</strong> {LEGAL_UPDATED}
             </p>

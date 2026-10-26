@@ -38,13 +38,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <PageHero size="md" compact crumbs={crumbs} issue="Testimonial" lines={[t.name]} intro={t.role} />
       <section className="pb-18 sm:pb-24">
         <div className="wrap grid gap-4 lg:grid-cols-[1.6fr_1fr]">
-          <figure className="rounded-[2rem] bg-white p-8 ring-1 ring-line sm:p-12">
+          <figure className="rounded-panel bg-white p-8 ring-1 ring-line sm:p-12">
             <blockquote className="h-title text-[clamp(1.3rem,2.4vw,1.9rem)] leading-snug text-ink">“{t.quote}”</blockquote>
             <figcaption className="mt-8 border-t border-line pt-5 text-graphite">
               <span className="font-bold text-ink">{t.name}</span>, {t.role}. This testimonial names BIV Reports, our sister brand.
             </figcaption>
           </figure>
-          <nav aria-label="More testimonials" className="rounded-[2rem] bg-white p-7 ring-1 ring-line sm:p-9">
+          <nav aria-label="More testimonials" className="rounded-panel bg-white p-7 ring-1 ring-line sm:p-9">
             <p className="eyebrow text-mute">More testimonials</p>
             <ul className="mt-4 grid gap-1">
               {others.map((o) => (

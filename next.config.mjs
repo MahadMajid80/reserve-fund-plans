@@ -14,7 +14,7 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""} https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://www.googletagmanager.com https://vercel.live`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://www.gstatic.com https://vercel.live https://vercel.com",
+  "img-src 'self' data: blob: https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com https://www.gstatic.com https://vercel.live https://vercel.com",
   "font-src 'self' data: https://vercel.live",
   "connect-src 'self' https://www.google.com/recaptcha/ https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://vercel.live wss://ws-us3.pusher.com",
   "frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/ https://vercel.live",
@@ -50,7 +50,12 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
 
-  images: { formats: ["image/avif", "image/webp"], minimumCacheTTL: 60 * 60 * 24 * 30 },
+  images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+    // building photos come from Unsplash's CDN (see lib/photos.ts)
+    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
+  },
 
   async headers() {
     return [
