@@ -39,7 +39,14 @@ The logo in `public/rfp-logo.svg` is a stand-in redrawn from the yellow-on-black
 | Shapes | Very rounded panels (1.5–2.5rem), pill buttons | Squarer: 0.75–1rem panels, square-cornered buttons and menu |
 | Homepage hero | Split: text left, rounded photo right | Full-width Perth photo (Elizabeth Quay) with text over a dark wash, plus a figures strip |
 | Photos | One building photo, Sydney skyline | Australian high-rises: Elizabeth Quay and Kings Park (Perth), residential and glass towers |
-| Closing panels | Plain dark panel | Perth skyline photo behind the call to action |
+| Closing panels | Plain dark panel | Perth skyline photo behind the call to action, steps on a numbered timeline |
+| Section labels | "01 —— TITLE" | Red bar, title, then "/ 01" |
+| Report cards | 2×2 white spotlight cards | One row of photo-topped cards with a report-colour bar |
+| Figures | White stat cards | Yellow-and-black band (the logo's colours) |
+| Calculator, coverage map | Text left, panel right | Flipped: panel/map left |
+| About section | Staggered value cards | Building photo + numbered values list; dark timeline strip |
+| Testimonials | Draggable carousel | Grid of quote cards |
+| Inner pages | Plain title area | Building-photo banner under the title; photos behind service-page headers |
 
 ## Photos
 

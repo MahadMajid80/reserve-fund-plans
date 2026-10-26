@@ -1,5 +1,6 @@
 "use client";
 
+import { servicePhoto } from "@/lib/photos";
 import { AnimatePresence, motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FaqList, PageHero, QuoteBand, SectionHead, ServiceCards } from "../PageKit";
@@ -20,6 +21,7 @@ export function ServicePage({ service: s }: { service: Service }) {
       <PageHero
         dark
         compact
+        bgPhoto={servicePhoto[s.slug]}
         crumbs={[
           ["Home", paths.home],
           ["Services", paths.services],

@@ -224,10 +224,11 @@ export function Rule({ className = "", delay = 0 }: { className?: string; delay?
 /** Small uppercase eyebrow with an optional index number and a blue tick. */
 export function Eyebrow({ children, no, className = "", dark = false }: { children: React.ReactNode; no?: string; className?: string; dark?: boolean }) {
   return (
-    <span className={`eyebrow inline-flex items-center gap-3 ${dark ? "text-white/70" : "text-mute"} ${className}`}>
-      {no ? <span className={`tabular-nums ${dark ? "text-brand-soft" : "text-brand"}`}>{no}</span> : <span className="size-1.5 rounded-full bg-brand" />}
-      {no && <span className={`h-px w-8 ${dark ? "bg-white/25" : "bg-ink/20"}`} />}
+    // Reserve Fund Plans label: a short coloured bar, the title, then the section number (BIV: "01 —— TITLE")
+    <span className={`eyebrow inline-flex items-center gap-2.5 ${dark ? "text-white/80" : "text-ink"} ${className}`}>
+      <span aria-hidden="true" className={`h-3.5 w-1 ${dark ? "bg-brand-soft" : "bg-brand"}`} />
       {children}
+      {no && /^\d+$/.test(no) && <span className={`tabular-nums ${dark ? "text-white/60" : "text-graphite"}`}>/ {no}</span>}
     </span>
   );
 }

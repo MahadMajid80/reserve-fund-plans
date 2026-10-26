@@ -5,6 +5,7 @@ import { AnimatePresence, animate, motion, useMotionValue, useScroll, useTransfo
 import { useEffect, useRef, useState } from "react";
 import { Logo, Mark } from "./Diamonds";
 import { Photo } from "./Photo";
+import { servicePhoto } from "@/lib/photos";
 import { A, Arrow, Button, Chapter, Chip, Counter, FadeUp, LineLink, LineReveal, Marquee, ease, easeInOut, useSectionProgress } from "./ui";
 import { useFirstLoad } from "@/lib/intro";
 import { alsoAvailable, contact, diamonds, services, states, stats, steps, timeline, tones, values, type DiamondKey } from "@/lib/content";
@@ -214,40 +215,41 @@ export function Reports() {
           lines={["Four reports.", <span key="o" className="text-mute">One standard of care.</span>]}
           text="Each report is properly researched and presented in our Easy to Read Report format, so strata managers and councils of owners can act with confidence."
         />
-        <div className="mt-11 grid gap-4 md:grid-cols-2">
+        {/* Reserve Fund Plans layout: one row of photo-topped cards (BIV uses a 2×2 grid of spotlight cards) */}
+        <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((s, i) => (
-            <FadeUp key={s.code} delay={(i % 2) * 0.08}>
-              <SpotCard k={s.key} href={s.href} className="flex min-h-[25rem] flex-col p-7 sm:p-9">
-                <div className="flex items-center justify-between" aria-hidden="true">
-                  <span className="flex items-center gap-2.5 rounded-full px-3 py-1.5 text-[12px] font-bold tracking-wide" style={{ background: tones[s.key].tint, color: tones[s.key].text }}>
-                    <span className="size-2 rounded-full" style={{ background: diamonds[s.key] }} />
-                    {s.code}
-                  </span>{" "}
-                  <span className="text-sm font-semibold text-mute tabular-nums">0{i + 1}</span>
-                </div>{" "}
-                <h3 className="h-title mt-10 text-[clamp(1.5rem,2.4vw,2rem)]">{s.title}</h3>
-                <p className="mt-3 max-w-md leading-relaxed text-graphite">{s.body}</p>
-                <ul className="mt-6 grid gap-2.5">
-                  {s.points.map((p) => (
-                    <li key={p} className="flex items-center gap-3 text-[15px] font-medium">
-                      <Check color={tones[s.key].text} /> {p}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-auto flex items-end justify-between gap-6 pt-8">
-                  <span className="text-[13px] text-mute">{s.ref}</span>{" "}
-                  <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full ring-1 ring-line transition-all duration-500 group-hover:bg-brand group-hover:text-white group-hover:ring-brand">
-                    <span className="transition-transform duration-500 group-hover:-rotate-45">
-                      <Arrow />
-                    </span>
-                  </span>
-                </div>
-              </SpotCard>
+            <FadeUp key={s.code} delay={i * 0.07} className="h-full">
+              <PhotoCard s={s} n={i + 1} />
             </FadeUp>
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+/** A service card with a building photo on top and the report colour as a bar under it. */
+export function PhotoCard({ s, n }: { s: (typeof services)[number]; n: number }) {
+  const slug = s.href.split("/").filter(Boolean).pop() as keyof typeof servicePhoto;
+  return (
+    <A href={s.href} className="group flex h-full flex-col overflow-hidden rounded-card bg-white ring-1 ring-line transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]">
+      <span className="relative block aspect-[16/9] overflow-hidden bg-navy sm:aspect-[4/3]">
+        <Photo k={servicePhoto[slug]} decorative fill sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+        <span className="absolute top-3 left-3 rounded-md bg-white/95 px-2.5 py-1 text-[12px] font-bold tracking-wide text-ink">{s.code}</span>
+        <span className="absolute top-3 right-3 text-sm font-semibold text-white tabular-nums drop-shadow">0{n}</span>
+      </span>
+      <span className="block h-1.5" style={{ background: diamonds[s.key] }} aria-hidden="true" />
+      <span className="flex flex-1 flex-col p-6">
+        <span className="h-title text-[1.35rem]">{s.title}</span>
+        <span className="mt-2 block text-[15px] leading-relaxed text-graphite">{s.body}</span>
+        <span className="mt-auto flex items-center gap-2 pt-6 text-[15px] font-semibold text-brand">
+          Read more
+          <span className="transition-transform duration-300 group-hover:translate-x-1">
+            <Arrow className="size-3.5" />
+          </span>
+        </span>
+      </span>
+    </A>
   );
 }
 
@@ -322,25 +324,19 @@ export function Feature() {
 /* ════════ By the numbers ════════ */
 export function Numbers() {
   return (
-    <section className="py-18 sm:py-24">
-      <div className="wrap">
-        <Head no="03" title="By the numbers" lines={["Four decades of", "strata expertise."]} />
-        <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <section className="bg-brand-soft text-navy">
+      {/* Reserve Fund Plans: a yellow-and-black band in the logo's colours (BIV uses white stat cards) */}
+      <div className="wrap py-14 sm:py-18">
+        <Chapter no="03" title="By the numbers" />
+        <p className="h-display mt-5 max-w-3xl text-[clamp(2rem,4vw,3.4rem)]">Four decades of strata expertise.</p>
+        <div className="mt-10 grid grid-cols-2 gap-y-8 border-t-2 border-navy pt-8 lg:grid-cols-4">
           {stats.map((s, i) => (
-            <FadeUp key={s.label} delay={i * 0.07} className="h-full">
-              {/* every card lays out the same way from the top, so the numbers and labels line up across the row;
-                  the number is sized to the card's own width (cqw) so long figures like 30,000+ never overflow */}
-              <div role="group" aria-label={s.phrase} className="@container flex h-full flex-col rounded-card bg-white p-7 ring-1 ring-line">
-                <span className="flex items-center justify-between" aria-hidden="true">
-                  <span className="text-sm font-semibold text-mute tabular-nums">0{i + 1}</span>
-                  <Mark mono className="size-5 text-ink/15" />
-                </span>
-                <p className="mt-12">
-                  <span className="h-display block text-[min(4rem,19cqw)] leading-none whitespace-nowrap text-brand tabular-nums">
-                    {s.kind === "year" ? <Counter from={1950} to={s.value} duration={2.2} /> : <Counter to={s.value} prefix={s.prefix} suffix={s.suffix} group={s.value >= 10000} />}
-                  </span>{" "}
-                  <span className="mt-3 block text-graphite">{s.label}</span>
+            <FadeUp key={s.label} delay={i * 0.07}>
+              <div role="group" aria-label={s.phrase} className={`@container pr-4 ${i ? "lg:border-l lg:border-navy/25 lg:pl-8" : ""} ${i % 2 ? "border-l border-navy/25 pl-5 lg:pl-8" : ""}`}>
+                <p className="h-display text-[min(3.6rem,24cqw)] leading-none whitespace-nowrap tabular-nums">
+                  {s.kind === "year" ? <Counter from={1950} to={s.value} duration={2.2} /> : <Counter to={s.value} prefix={s.prefix} suffix={s.suffix} group={s.value >= 10000} />}
                 </p>
+                <p className="mt-3 text-[15px] font-semibold text-navy/75">{s.label}</p>
               </div>
             </FadeUp>
           ))}
@@ -366,7 +362,7 @@ export function Calculator() {
   return (
     <section className="px-3 sm:px-5">
       <div className="mx-auto max-w-[90rem] rounded-panel bg-mist py-16 sm:rounded-panel sm:py-22">
-        <div className="wrap grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-20">
+        <div className="wrap grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-20">
           <div>
             <Chapter no="04" title="The averaging clause" />
             <LineReveal className="h-display mt-6 text-[clamp(2.2rem,4.6vw,4rem)]" lines={["What under-insurance", <span key="r" className="text-brand">really costs you.</span>]} />
@@ -382,7 +378,7 @@ export function Calculator() {
             </FadeUp>
           </div>
 
-          <FadeUp>
+          <FadeUp className="lg:order-first">
             <div className="grain rounded-card bg-navy p-6 text-white shadow-[var(--shadow-lift)] sm:p-9">
               <div className="grid gap-7">
                 <Slider id="calc-replacement" label="True replacement cost" value={fmt(replacement)} min={1_000_000} max={30_000_000} step={500_000} v={replacement} onChange={setReplacement} />
@@ -471,7 +467,7 @@ export function Coverage({ no = "05" }: { no?: string }) {
     <section id="coverage" className="py-18 sm:py-24">
       <div className="wrap">
         <Head no={no} title="Coverage" lines={["Where we", <span key="r" className="text-brand">prepare reports.</span>]} text="Based in Applecross, Perth. Choose Western Australia or South Australia to see the reports we prepare there." />
-        <div className="mt-11 grid items-stretch gap-4 lg:grid-cols-[1fr_1.15fr]">
+        <div className="mt-11 grid items-stretch gap-4 lg:grid-cols-[1.15fr_1fr]">
           <FadeUp className="h-full">
             <div className="flex h-full flex-col rounded-card bg-white p-7 ring-1 ring-line sm:p-9">
               <AnimatePresence mode="wait" initial={false}>
@@ -501,7 +497,7 @@ export function Coverage({ no = "05" }: { no?: string }) {
             </div>
           </FadeUp>
 
-          <FadeUp delay={0.08} className="h-full">
+          <FadeUp delay={0.08} className="h-full lg:order-first">
             <div className="h-full rounded-card bg-white p-3 ring-1 ring-line sm:p-4">
               <svg viewBox={AU_VIEWBOX} className="mx-auto h-full max-h-[34rem] w-full" role="group" aria-label="Map of Australia: choose Western Australia or South Australia">
                 {/* ACT is drawn last so it sits on top of NSW */}
@@ -586,133 +582,69 @@ export function Article() {
             </FadeUp>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            {values.map((v, i) => (
-              <FadeUp key={v.title} delay={(i % 2) * 0.08} className={i % 2 ? "sm:translate-y-10" : ""}>
-                <div className="group h-full rounded-card bg-white p-7 ring-1 ring-line transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]">
-                  <span className="grid size-11 place-items-center rounded-full transition-transform duration-700 group-hover:rotate-90" style={{ background: tones[v.key].tint, color: tones[v.key].text }}>
-                    <Mark className="size-5" />
+          {/* Reserve Fund Plans layout: a building photo above a numbered list of values (BIV uses staggered value cards) */}
+          <div>
+            <FadeUp>
+              <div className="relative aspect-[16/10] overflow-hidden rounded-panel bg-navy">
+                <Photo k="coastalTower" decorative fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
+                <span className="absolute bottom-3 left-3 rounded-md bg-navy/80 px-3 py-1.5 text-[12px] font-semibold text-white backdrop-blur-sm">Strata specialists since 1984</span>
+              </div>
+            </FadeUp>
+            <ol className="mt-4 divide-y divide-line rounded-panel bg-white ring-1 ring-line">
+              {values.map((v, i) => (
+                <FadeUp as="li" key={v.title} delay={i * 0.06} className="grid list-none grid-cols-[2.75rem_1fr] gap-4 p-6 sm:p-7">
+                  <span className="grid size-11 place-items-center rounded-md text-[15px] font-bold tabular-nums" style={{ background: tones[v.key].tint, color: tones[v.key].text }}>
+                    0{i + 1}
                   </span>
-                  <h3 className="h-title mt-8 text-[1.45rem]">{v.title}</h3>
-                  <p className="mt-2.5 leading-relaxed text-graphite">{v.body}</p>
-                </div>
-              </FadeUp>
-            ))}
+                  <span>
+                    <h3 className="h-title text-[1.3rem]">{v.title}</h3>
+                    <p className="mt-1.5 leading-relaxed text-graphite">{v.body}</p>
+                  </span>
+                </FadeUp>
+              ))}
+            </ol>
           </div>
         </div>
 
-        {/* timeline */}
-        <div className="relative mt-18 sm:mt-24">
-          <div className="absolute top-[0.6rem] right-0 left-0 hidden h-px bg-line lg:block" />
-          <motion.div
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 1.8, ease: easeInOut }}
-            className="absolute top-[0.6rem] right-0 left-0 hidden h-px origin-left bg-brand lg:block"
-          />
-          <ol className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-            {timeline.map((t, i) => (
-              <FadeUp as="li" key={t.year} delay={0.2 + i * 0.12} className="relative list-none">
-                <div>
-                  <span className="relative z-10 block size-5 rounded-full border-4 border-canvas bg-brand ring-1 ring-brand/30" />
-                  <p className="h-display mt-6 text-[2.4rem] text-brand">{t.year}</p>{" "}
-                  <p className="mt-3 max-w-xs leading-relaxed text-graphite">{t.text}</p>
-                </div>
-              </FadeUp>
-            ))}
-          </ol>
-        </div>
+        {/* timeline: four dated blocks on a black ledger rule */}
+        <ol className="mt-18 grid gap-px overflow-hidden rounded-panel bg-navy/90 ring-1 ring-navy sm:mt-24 sm:grid-cols-2 lg:grid-cols-4">
+          {timeline.map((t, i) => (
+            <FadeUp as="li" key={t.year} delay={0.1 + i * 0.1} className="list-none bg-navy p-7 text-white">
+              <span className="block h-1 w-10 bg-brand-soft" aria-hidden="true" />
+              <p className="h-display mt-5 text-[2.2rem] text-brand-soft">{t.year}</p>
+              <p className="mt-3 leading-relaxed text-white/75">{t.text}</p>
+            </FadeUp>
+          ))}
+        </ol>
       </div>
     </section>
   );
 }
 
-/* ════════ Testimonials: draggable carousel ════════ */
+/* ════════ Testimonials: a grid of quote cards (BIV uses a draggable carousel) ════════ */
 const homeQuotes = ["Christine Nesbit", "Michael Kimpton", "Bryan", "Emma Fairbrother"].map(testimonialByName);
 
 export function Quotes() {
-  const wrap = useRef<HTMLDivElement>(null);
-  const track = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const [max, setMax] = useState(0);
-  const progress = useTransform(x, (v) => (max ? Math.min(1, Math.max(0, -v / max)) : 0));
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(false);
-
-  useEffect(() => {
-    const measure = () => {
-      if (!wrap.current || !track.current) return;
-      setMax(Math.max(0, track.current.scrollWidth - wrap.current.clientWidth));
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
-  useEffect(
-    () =>
-      x.on("change", (v) => {
-        setAtStart(v > -4);
-        setAtEnd(v < -max + 4);
-      }),
-    [x, max],
-  );
-
-  const step = () => (track.current?.firstElementChild as HTMLElement | null)?.offsetWidth ?? 400;
-  const go = (d: number) => animate(x, Math.min(0, Math.max(-max, x.get() - d * (step() + 16))), { type: "spring", stiffness: 140, damping: 26 });
-
   return (
-    <section className="overflow-hidden py-18 sm:py-24">
+    <section className="py-18 sm:py-24">
       <div className="wrap">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div>
             <Chapter no="07" title="In their words" />
-            <LineReveal className="h-display mt-6 text-[clamp(2.2rem,4.6vw,4rem)]" lines={["Trusted by strata", "managers and owners."]} />
+            <LineReveal className="h-display mt-6 text-[clamp(2.2rem,4.6vw,4rem)]" lines={["Trusted by strata", "managers and agents."]} />
           </div>
-          <div className="flex items-center gap-2">
-            {[-1, 1].map((d) => (
-              <button
-                key={d}
-                onClick={() => go(d)}
-                disabled={d < 0 ? atStart : atEnd}
-                aria-label={d < 0 ? "Previous testimonials" : "Next testimonials"}
-                className="grid size-12 place-items-center rounded-full bg-white ring-1 ring-line transition-all hover:bg-brand hover:text-white hover:ring-brand disabled:pointer-events-none disabled:opacity-35"
-              >
-                <Arrow className={`size-4 ${d < 0 ? "rotate-180" : ""}`} />
-              </button>
-            ))}
-          </div>
+          <LineLink href={paths.testimonials}>Read all {testimonialCount} testimonials</LineLink>
         </div>
-
-        <div ref={wrap} className="mt-11">
-          <motion.div
-            ref={track}
-            drag="x"
-            dragConstraints={{ left: -max, right: 0 }}
-            dragElastic={0.08}
-            dragTransition={{ power: 0.25, timeConstant: 260 }}
-            style={{ x }}
-            className="flex cursor-grab gap-4 active:cursor-grabbing"
-          >
-            {homeQuotes.map((t, i) => (
-              <figure key={t.name} className="flex w-[19rem] shrink-0 flex-col justify-between rounded-card bg-white p-7 ring-1 ring-line select-none sm:w-[25rem] sm:p-8">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex gap-0.5 text-brand" aria-hidden="true">
-                      {Array.from({ length: 5 }).map((_, n) => (
-                        <svg key={n} viewBox="0 0 20 20" className="size-4" fill="currentColor">
-                          <path d="m10 1.8 2.5 5.3 5.8.7-4.3 4 1.1 5.7L10 14.7l-5.1 2.8 1.1-5.7-4.3-4 5.8-.7z" />
-                        </svg>
-                      ))}
-                    </span>
-                    <span className="text-sm text-mute tabular-nums" aria-hidden="true">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <blockquote className="mt-6 text-[1.08rem] leading-relaxed text-ink">“{t.quote}”</blockquote>
-                </div>
-                <figcaption className="mt-8 flex items-center gap-3 border-t border-line pt-5">
-                  <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-mist text-sm font-bold text-brand">
+        <div className="mt-11 grid gap-4 md:grid-cols-2">
+          {homeQuotes.map((t, i) => (
+            <FadeUp key={t.name} delay={(i % 2) * 0.08} className="h-full">
+              <figure className={`flex h-full flex-col rounded-card p-7 ring-1 sm:p-9 ${i === 0 ? "bg-navy text-white ring-navy" : "bg-white ring-line"}`}>
+                <span aria-hidden="true" className={`h-display block text-[4.5rem] leading-[0.6] ${i === 0 ? "text-brand-soft" : "text-brand"}`}>
+                  “
+                </span>
+                <blockquote className={`mt-4 mb-8 text-[1.08rem] leading-relaxed ${i === 0 ? "text-white/90" : "text-ink"}`}>{t.quote}</blockquote>
+                <figcaption className={`mt-auto flex items-center gap-3 border-t pt-5 ${i === 0 ? "border-white/15" : "border-line"}`}>
+                  <span aria-hidden="true" className={`grid size-10 shrink-0 place-items-center rounded-md text-sm font-bold ${i === 0 ? "bg-brand-soft text-navy" : "bg-mist text-brand"}`}>
                     {t.name
                       .split(" ")
                       .map((w) => w[0])
@@ -721,20 +653,14 @@ export function Quotes() {
                   </span>{" "}
                   <span>
                     <span className="block text-[15px] font-bold">{t.name}</span>{" "}
-                    <span className="block text-[13px] text-mute">{t.role}</span>
+                    <span className={`block text-[13px] ${i === 0 ? "text-white/70" : "text-mute"}`}>{t.role}</span>
                   </span>
                 </figcaption>
               </figure>
-            ))}
-          </motion.div>
+            </FadeUp>
+          ))}
         </div>
-
-        <div className="mt-10 flex flex-wrap items-center justify-between gap-6">
-          <div className="h-px w-full max-w-xs bg-line">
-            <motion.div style={{ scaleX: progress }} className="h-full origin-left bg-brand" />
-          </div>
-          <LineLink href={paths.testimonials}>Read all {testimonialCount} testimonials</LineLink>
-        </div>
+        <p className="mt-6 text-sm text-mute">These testimonials name BIV Reports, our sister brand.</p>
       </div>
     </section>
   );
@@ -757,14 +683,14 @@ export function Closing() {
         <div className="wrap relative">
           <Chapter no="08" title="Request a quote" dark />
           <LineReveal className="h-display mt-6 max-w-4xl text-[clamp(2.4rem,5.6vw,4.8rem)]" lines={["Make your next report", <span key="e" className="text-brand-soft">the easy part.</span>]} />
-          <ol className="mt-11 grid gap-3 md:grid-cols-3">
+          {/* Reserve Fund Plans layout: a numbered timeline on one rule (BIV uses three glass cards) */}
+          <ol className="relative mt-12 grid gap-8 md:grid-cols-3 md:gap-10">
+            <span aria-hidden="true" className="absolute top-5 right-0 left-0 hidden h-px bg-white/25 md:block" />
             {steps.map((s, i) => (
-              <FadeUp as="li" key={s.title} delay={i * 0.08} className="h-full list-none">
-                <div className="h-full rounded-card bg-white/[0.06] p-7 ring-1 ring-white/10 backdrop-blur-sm">
-                  <span className="grid size-10 place-items-center rounded-full bg-brand text-sm font-bold text-white">{i + 1}</span>
-                  <h3 className="h-title mt-8 text-xl">{s.title}</h3>
-                  <p className="mt-2 leading-relaxed text-white/75">{s.body}</p>
-                </div>
+              <FadeUp as="li" key={s.title} delay={i * 0.1} className="relative list-none">
+                <span className="relative grid size-10 place-items-center rounded-md bg-brand-soft text-sm font-bold text-navy">{i + 1}</span>
+                <h3 className="h-title mt-6 text-xl">{s.title}</h3>
+                <p className="mt-2 max-w-xs leading-relaxed text-white/75">{s.body}</p>
               </FadeUp>
             ))}
           </ol>

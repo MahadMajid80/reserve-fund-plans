@@ -8,7 +8,7 @@ import { SpotCard } from "./Home";
 import { A, Arrow, Button, Chapter, FadeUp, LineReveal, ease, easeInOut } from "./ui";
 import { JsonLd } from "./JsonLd";
 import { contact, diamonds, tones, type DiamondKey } from "@/lib/content";
-import { type PhotoKey } from "@/lib/photos";
+import { servicePhoto, type PhotoKey } from "@/lib/photos";
 import { Photo } from "./Photo";
 import { breadcrumbSchema } from "@/lib/seo";
 import { faqId, services, type Faq } from "@/lib/services";
@@ -29,6 +29,8 @@ export function PageHero({
   aside,
   size = "lg",
   compact = false,
+  banner,
+  bgPhoto,
   children,
 }: {
   crumbs: [string, string][];
@@ -48,6 +50,10 @@ export function PageHero({
   size?: "lg" | "md";
   /** Changes by Asad: a short hero (about a third of the screen), no photo, chip beside the breadcrumbs */
   compact?: boolean;
+  /** Reserve Fund Plans: a building-photo banner under the title on light pages (false to turn it off) */
+  banner?: PhotoKey | false;
+  /** Reserve Fund Plans: a building photo behind a dark hero */
+  bgPhoto?: PhotoKey;
   children?: React.ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -68,6 +74,13 @@ export function PageHero({
   // heading run the full width, so short headings sit on one line and there is less empty space.
   const row = compact || !photo;
   const pad = compact ? "pt-24 pb-7 sm:pt-[6.75rem] sm:pb-9" : photo ? "pt-28 pb-12 sm:pt-32 sm:pb-16" : "pt-28 pb-10 sm:pt-32 sm:pb-12";
+
+  // Light pages without a side photo get a wide building-photo banner under the title (not on the form pages).
+  const lastPath = crumbs[crumbs.length - 1]?.[1] ?? "";
+  const formPage = ["/contact-us/", "/quote-request/", "/legal/"].includes(lastPath);
+  const autoBanner: PhotoKey = (["perthDay", "apartmentTowers", "elizabethQuay", "coastalTower", "perthSunset", "glassTower"] as PhotoKey[])[lastPath.length % 6];
+  const bannerKey: PhotoKey = banner || autoBanner;
+  const showBanner = !dark && !photo && !compact && banner !== false && !formPage;
 
   const inner = (
     <div className={`wrap relative ${pad}`}>
@@ -144,6 +157,17 @@ export function PageHero({
           </div>
         )}
       </div>
+      {showBanner && (
+        <FadeUp className="mt-8 sm:mt-10">
+          <div className="relative h-36 overflow-hidden rounded-panel bg-navy sm:h-48 lg:h-56">
+            <motion.div style={{ y: still ? 0 : imgY }} className="absolute inset-0 h-[120%] w-full">
+              <Photo k={bannerKey} decorative fill sizes="(min-width: 1344px) 84rem, 100vw" className="object-cover" />
+            </motion.div>
+            <div className="absolute inset-0 bg-gradient-to-t from-navy/45 to-transparent" />
+            <span aria-hidden="true" className="absolute bottom-0 left-0 h-1.5 w-28 bg-brand-soft" />
+          </div>
+        </FadeUp>
+      )}
     </div>
   );
 
@@ -158,6 +182,12 @@ export function PageHero({
   return (
     <section ref={ref} className="px-3 pt-3 sm:px-5 sm:pt-5">
       <div className="grain relative overflow-hidden rounded-panel bg-navy text-white sm:rounded-panel">
+        {bgPhoto && (
+          <>
+            <Photo k={bgPhoto} decorative fill priority sizes="100vw" className="object-cover opacity-40" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy via-navy/85 to-navy/35" />
+          </>
+        )}
         <Mark line className="pointer-events-none absolute -top-32 -left-32 w-[34rem] text-white/[0.05]" />
         {inner}
       </div>
@@ -259,30 +289,30 @@ export function FaqList({
   );
 }
 
-/* ───────── Report cards ───────── */
+/* ───────── Report cards: photo-topped (same style as the homepage) ───────── */
 export function ServiceCards({ exclude }: { exclude?: string }) {
   const list = services.filter((s) => s.slug !== exclude);
   return (
     <div className={`grid gap-4 sm:grid-cols-2 ${list.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
       {list.map((s, i) => (
         <FadeUp key={s.slug} delay={i * 0.06} className="h-full">
-          <SpotCard k={s.key} href={s.path} className="min-h-[19rem] p-7">
-            <span className="flex items-center justify-between" aria-hidden="true">
-              <span className="flex items-center gap-2 rounded-full px-3 py-1.5 text-[12px] font-bold" style={{ background: tones[s.key].tint, color: tones[s.key].text }}>
-                <span className="size-2 rounded-full" style={{ background: diamonds[s.key] }} />
-                {s.code}
-              </span>
-              <span className="grid size-10 place-items-center rounded-full ring-1 ring-line transition-all duration-500 group-hover:bg-brand group-hover:text-white group-hover:ring-brand">
-                <span className="transition-transform duration-500 group-hover:-rotate-45">
-                  <Arrow />
+          <A href={s.path} className="group flex h-full flex-col overflow-hidden rounded-card bg-white ring-1 ring-line transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]">
+            <span className="relative block aspect-[16/9] overflow-hidden bg-navy">
+              <Photo k={servicePhoto[s.slug]} decorative fill sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+              <span className="absolute top-3 left-3 rounded-md bg-white/95 px-2.5 py-1 text-[12px] font-bold tracking-wide text-ink">{s.code}</span>
+            </span>
+            <span className="block h-1.5" style={{ background: diamonds[s.key] }} aria-hidden="true" />
+            <span className="flex flex-1 flex-col p-6">
+              <span className="h-title block text-[1.35rem]">{s.title}</span>
+              <span className="mt-2 block leading-relaxed text-graphite">{s.tagline}</span>
+              <span className="mt-auto flex items-center gap-2 pt-5 text-[15px] font-semibold text-brand">
+                Read more
+                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                  <Arrow className="size-3.5" />
                 </span>
               </span>
-            </span>{" "}
-            <span className="mt-auto block pt-10">
-              <span className="h-title block text-[1.45rem]">{s.title}</span>{" "}
-              <span className="mt-2 block leading-relaxed text-graphite">{s.tagline}</span>
             </span>
-          </SpotCard>
+          </A>
         </FadeUp>
       ))}
     </div>

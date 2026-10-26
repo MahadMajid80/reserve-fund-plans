@@ -70,3 +70,11 @@ export type PhotoKey = keyof typeof photos;
 export function unsplashLoader({ src, width, quality }: { src: string; width: number; quality?: number }) {
   return `${src}?auto=format&fit=crop&w=${width}&q=${quality ?? 72}`;
 }
+
+/** The photo shown with each service (cards on the homepage and inner pages, and the service-page header). */
+export const servicePhoto: Record<"biv" | "whs" | "sfp" | "asb", PhotoKey> = {
+  sfp: "perthDay",
+  biv: "coastalTower",
+  whs: "apartmentTowers",
+  asb: "glassTower",
+};
