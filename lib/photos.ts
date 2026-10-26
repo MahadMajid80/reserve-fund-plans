@@ -7,6 +7,16 @@
 export type Photo = { src: string; alt: string; credit: string; profile: string; page: string; place: string; position?: string };
 
 export const photos = {
+  /** Sydney CBD high-rises above Darling Harbour, with Sydney Tower (homepage hero). */
+  sydneyHighRise: {
+    src: "https://images.unsplash.com/photo-1551783841-0271a5f7c868",
+    alt: "Sydney CBD high-rise towers and Sydney Tower above Darling Harbour",
+    credit: "Eggzy Pallet",
+    profile: "https://unsplash.com/@h4rd3n",
+    page: "https://unsplash.com/photos/dyMfI-jeZ3c",
+    place: "Sydney CBD, NSW",
+    position: "65% 60%",
+  },
   /** Residential towers on the Swan River at Elizabeth Quay, Perth. */
   elizabethQuay: {
     src: "https://images.unsplash.com/photo-1596826063323-9a60b8d11e72",

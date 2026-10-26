@@ -43,7 +43,7 @@ export function Hero() {
     <section ref={ref} id="top" className="relative">
       <div className="relative isolate overflow-hidden bg-navy text-white">
         <motion.div style={{ y: imgY, scale: 1.08 }} className="absolute inset-0 -z-10">
-          <Photo k="elizabethQuay" fill priority fetchPriority="high" sizes="100vw" className="object-cover" />
+          <Photo k="sydneyHighRise" fill priority fetchPriority="high" sizes="100vw" className="object-cover" />
         </motion.div>
         {/* dark wash, strongest behind the text, so it reads on any part of the photo */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy/95 via-navy/75 to-navy/25" />
