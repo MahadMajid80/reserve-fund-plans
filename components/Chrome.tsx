@@ -280,13 +280,27 @@ export function Footer() {
           <FooterCol title="Frequently Asked Questions" items={[...services.map((s) => [s.faq.h1, s.faqPath]), ["All FAQ's", paths.faq]]} />
         </div>
 
-        {/* sized to the container width (cqw) so the full name always fits on one line, at any screen size */}
+        {/* The big wordmark is an SVG whose text is fitted to exactly the footer width (textLength), so the full name
+            always shows on one line whatever the font, screen size or browser. Decorative, so hidden from screen readers. */}
         <div className="wrap relative" aria-hidden="true">
-          <div className="@container">
-          <p className="h-display bg-gradient-to-b from-white/14 to-white/0 bg-clip-text pb-[0.06em] text-[11.6cqw] leading-[0.9] whitespace-nowrap tracking-[-0.05em] text-transparent select-none">
-            Reserve Fund Plans
-          </p>
-          </div>
+          <svg viewBox="0 0 1000 124" className="block h-auto w-full overflow-visible select-none" focusable="false">
+            <defs>
+              <linearGradient id="footer-wordmark" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#ffffff" stopOpacity="0.16" />
+                <stop offset="1" stopColor="#ffffff" stopOpacity="0.03" />
+              </linearGradient>
+            </defs>
+            <text
+              x="0"
+              y="100"
+              textLength="1000"
+              lengthAdjust="spacingAndGlyphs"
+              fill="url(#footer-wordmark)"
+              style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 107, letterSpacing: "-0.03em" }}
+            >
+              Reserve Fund Plans
+            </text>
+          </svg>
         </div>
 
         <div className="wrap relative flex flex-wrap items-center justify-between gap-4 border-t border-white/10 py-6 text-[13px] text-white/60">
