@@ -279,10 +279,13 @@ export function Footer() {
           <FooterCol title="Frequently Asked Questions" items={[...services.map((s) => [s.faq.h1, s.faqPath]), ["All FAQ's", paths.faq]]} />
         </div>
 
+        {/* sized to the container width (cqw) so the full name always fits on one line, at any screen size */}
         <div className="wrap relative" aria-hidden="true">
-          <p className="h-display bg-gradient-to-b from-white/14 to-white/0 bg-clip-text text-[clamp(2.6rem,14.5vw,15rem)] leading-[0.82] whitespace-nowrap tracking-[-0.06em] text-transparent select-none">
+          <div className="@container">
+          <p className="h-display bg-gradient-to-b from-white/14 to-white/0 bg-clip-text pb-[0.06em] text-[11.6cqw] leading-[0.9] whitespace-nowrap tracking-[-0.05em] text-transparent select-none">
             Reserve Fund Plans
           </p>
+          </div>
         </div>
 
         <div className="wrap relative flex flex-wrap items-center justify-between gap-4 border-t border-white/10 py-6 text-[13px] text-white/60">
