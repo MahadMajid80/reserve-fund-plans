@@ -328,16 +328,18 @@ export function Numbers() {
         <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s, i) => (
             <FadeUp key={s.label} delay={i * 0.07} className="h-full">
-              <div role="group" aria-label={s.phrase} className="flex h-full flex-col justify-between rounded-card bg-white p-7 ring-1 ring-line">
+              {/* every card lays out the same way from the top, so the numbers and labels line up across the row;
+                  the number is sized to the card's own width (cqw) so long figures like 30,000+ never overflow */}
+              <div role="group" aria-label={s.phrase} className="@container flex h-full flex-col rounded-card bg-white p-7 ring-1 ring-line">
                 <span className="flex items-center justify-between" aria-hidden="true">
                   <span className="text-sm font-semibold text-mute tabular-nums">0{i + 1}</span>
                   <Mark mono className="size-5 text-ink/15" />
                 </span>
                 <p className="mt-12">
-                  <span className="h-display block text-[clamp(2.8rem,4.6vw,4rem)] text-brand">
+                  <span className="h-display block text-[min(4rem,19cqw)] leading-none whitespace-nowrap text-brand tabular-nums">
                     {s.kind === "year" ? <Counter from={1950} to={s.value} duration={2.2} /> : <Counter to={s.value} prefix={s.prefix} suffix={s.suffix} group={s.value >= 10000} />}
                   </span>{" "}
-                  <span className="mt-2 block text-graphite">{s.label}</span>
+                  <span className="mt-3 block text-graphite">{s.label}</span>
                 </p>
               </div>
             </FadeUp>

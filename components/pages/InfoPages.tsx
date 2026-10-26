@@ -56,12 +56,12 @@ export function AboutPage() {
         <div className="wrap grid grid-cols-2 gap-3 lg:grid-cols-4">
           {stats.map((s, i) => (
             <FadeUp key={s.label} delay={i * 0.06} className="h-full">
-              <div role="group" aria-label={s.phrase} className="h-full rounded-card bg-white p-6 ring-1 ring-line sm:p-7">
+              <div role="group" aria-label={s.phrase} className="@container h-full rounded-card bg-white p-6 ring-1 ring-line sm:p-7">
                 <p>
-                  <span className="h-display block text-[clamp(2.2rem,4.4vw,3.6rem)] text-brand">
+                  <span className="h-display block text-[min(3.6rem,19cqw)] leading-none whitespace-nowrap text-brand tabular-nums">
                     {s.kind === "year" ? <Counter from={1950} to={s.value} duration={2} /> : <Counter to={s.value} prefix={s.prefix} suffix={s.suffix} group={s.value >= 10000} />}
                   </span>{" "}
-                  <span className="mt-2 block text-[15px] text-graphite">{s.label}</span>
+                  <span className="mt-3 block text-[15px] text-graphite">{s.label}</span>
                 </p>
               </div>
             </FadeUp>

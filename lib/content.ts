@@ -90,9 +90,9 @@ export const services = [
 
 export const stats = [
   { value: 1984, label: "Valuing property since", kind: "year" as const, phrase: "Valuing property since 1984" },
-  { value: 30000, suffix: "+", label: "Strata schemes inspected in Australia", phrase: `Inspected ${facts.schemesInspected} strata schemes in Australia` },
+  { value: 30000, suffix: "+", label: "Strata schemes inspected", phrase: `Inspected ${facts.schemesInspected} strata schemes in Australia` },
   { value: 10, prefix: "$", suffix: "M", label: "Professional indemnity cover", phrase: `${facts.indemnity} professional indemnity cover` },
-  { value: 7, prefix: "3–", label: "Business days, normal turnaround", phrase: `Normal turnaround ${facts.turnaround}` },
+  { value: 7, prefix: "3–", label: "Business days turnaround", phrase: `Normal turnaround ${facts.turnaround}` },
 ];
 
 export const values = [
