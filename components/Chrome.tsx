@@ -64,7 +64,7 @@ export function Navbar() {
         >
           <nav className="flex h-16 items-center justify-between gap-4 pr-2 pl-4 sm:pl-5" aria-label="Main">
             <A href="/" aria-label="Reserve Fund Plans home" className="inline-flex min-h-11 items-center">
-              <Logo onDark={dark || (open && !raised)} className="h-10 sm:h-11" />
+              <Logo onDark={dark || (open && !raised)} className="h-11 lg:h-13" />
             </A>
 
             <ul className={`hidden items-center gap-0.5 rounded-lg p-1 ring-1 transition-colors duration-500 lg:flex ${dark ? "bg-transparent ring-white/30" : "bg-white/60 ring-line"}`}>
@@ -241,7 +241,7 @@ export function Footer() {
         <Mark line className="pointer-events-none absolute -top-24 -right-24 w-[30rem] text-white/[0.04]" />
         <div className="wrap relative grid gap-12 py-14 sm:py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <Logo onDark className="h-14" />
+            <Logo onDark className="h-16" />
             <p className="mt-6 max-w-xs leading-relaxed text-white/70">Accurate, practical property reports for strata and community schemes, in an Easy to Read Report format.</p>
             <a href={contact.phoneHref} className="h-display mt-8 block text-[2rem] tabular-nums transition-colors hover:text-brand-soft">
               {contact.phone}

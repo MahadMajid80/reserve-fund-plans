@@ -24,7 +24,7 @@ export const buildingPhoto = "/building.jpg";
 /** Used behind the "Why it matters" statement. TODO [ASK]: a Perth skyline or WA strata photo would suit better. */
 export const skylinePhoto = "/building.jpg";
 
-/** The Reserve Fund Plans logo (yellow on black badge, works on light and dark grounds). Stand-in redrawn until the original file is supplied. */
+/** The Reserve Fund Plans logo (yellow on black badge, works on light and dark grounds). Vector redraw of the live site's logo (scripts/make-logo.py). */
 export const logoSrc = "/rfp-logo.svg";
 export const logoWhiteSrc = "/rfp-logo.svg";
 
